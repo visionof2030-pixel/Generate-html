@@ -3,31 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منشئ الملف المهني للمعلمين</title>
+    <title>أداة الملف المهني للمعلم</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        :root {
-            --primary-color: #2c5aa0;
-            --secondary-color: #4a90e2;
-            --accent-color: #f8b739;
-            --light-color: #f5f9ff;
-            --dark-color: #2c3e50;
-            --success-color: #28a745;
-            --border-radius: 12px;
-            --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
-
-        .dark-mode {
-            --primary-color: #4a90e2;
-            --secondary-color: #6b9fe6;
-            --accent-color: #ffcc5c;
-            --light-color: #1e2a3a;
-            --dark-color: #f8f9fa;
-            --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
-
+        /* CSS Reset وتحسينات عامة */
         * {
             margin: 0;
             padding: 0;
@@ -35,81 +18,106 @@
             font-family: 'Tajawal', sans-serif;
         }
 
+        :root {
+            --primary-color: #4a6fa5;
+            --primary-dark: #166088;
+            --secondary-color: #17a2b8;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --text-color: #333;
+            --text-light: #666;
+            --border-color: #ddd;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.2);
+            --transition: all 0.3s ease;
+        }
+
+        /* الوضع الليلي */
+        body.dark-mode {
+            --primary-color: #2d4059;
+            --primary-dark: #1a1a2e;
+            --secondary-color: #138496;
+            --success-color: #218838;
+            --warning-color: #e0a800;
+            --light-color: #1a1a2e;
+            --dark-color: #162447;
+            --text-color: #f1f1f1;
+            --text-light: #b0b0b0;
+            --border-color: #2d4059;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
         body {
             background-color: var(--light-color);
-            color: var(--dark-color);
-            line-height: 1.7;
+            color: var(--text-color);
             transition: var(--transition);
-            padding-top: 120px;
+            min-height: 100vh;
+            direction: rtl;
         }
 
         .container {
-            max-width: 1400px;
+            width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
-        /* الهيدر */
-        header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        /* الهيدر الرئيسي */
+        .tool-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 25px 0;
-            position: fixed;
+            padding: 20px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
             top: 0;
-            width: 100%;
             z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        .header-content {
+        .header-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .teacher-name-display {
-            font-size: 2rem;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
             gap: 15px;
         }
 
-        .teacher-name-display input {
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 2rem;
-            font-weight: 800;
-            width: 400px;
-            max-width: 100%;
-            outline: none;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-            padding: 5px 0;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .teacher-name-display input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
         }
 
         .header-controls {
             display: flex;
-            gap: 15px;
-            align-items: center;
+            gap: 10px;
         }
 
         .control-btn {
             background: rgba(255, 255, 255, 0.15);
             border: none;
             color: white;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
+            padding: 8px 16px;
+            border-radius: 8px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
+            gap: 8px;
+            font-size: 0.9rem;
             transition: var(--transition);
         }
 
@@ -118,1984 +126,1750 @@
             transform: translateY(-2px);
         }
 
-        /* شريط التنقل */
-        nav {
-            background-color: white;
-            position: fixed;
-            top: 90px;
-            width: 100%;
-            z-index: 999;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            border-bottom: 1px solid #eee;
+        .header-bottom {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
         }
 
-        .dark-mode nav {
-            background-color: #2a3a4d;
-            border-bottom: 1px solid #3a4a5d;
-        }
-
-        .nav-container {
+        .teacher-input-section {
             display: flex;
             justify-content: space-between;
-            overflow-x: auto;
-            padding: 0;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
-        .nav-item {
-            padding: 18px 25px;
+        .input-group {
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group label {
+            display: flex;
             align-items: center;
             gap: 8px;
-            cursor: pointer;
-            transition: var(--transition);
-            min-width: 120px;
-            border-bottom: 3px solid transparent;
-            text-decoration: none;
-            color: var(--dark-color);
-        }
-
-        .dark-mode .nav-item {
-            color: #e0e0e0;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background-color: rgba(44, 90, 160, 0.05);
-            border-bottom: 3px solid var(--accent-color);
-        }
-
-        .dark-mode .nav-item:hover, .dark-mode .nav-item.active {
-            background-color: rgba(74, 144, 226, 0.1);
-        }
-
-        .nav-item i {
-            font-size: 1.4rem;
-            color: var(--primary-color);
-        }
-
-        .dark-mode .nav-item i {
-            color: var(--secondary-color);
-        }
-
-        .nav-item span {
-            font-size: 0.9rem;
             font-weight: 600;
-            white-space: nowrap;
+            font-size: 1rem;
+        }
+
+        #teacher-name {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            color: var(--text-color);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+            min-width: 250px;
+            transition: var(--transition);
+        }
+
+        #teacher-name:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+        }
+
+        .name-display-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .display-label {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .display-value {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            min-width: 150px;
+            text-align: center;
         }
 
         /* المحتوى الرئيسي */
         .main-content {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 30px;
-            margin: 40px 0;
+            padding: 30px 0;
         }
 
-        @media (max-width: 1100px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .section-content {
+        /* شريط التنقل */
+        .sections-nav {
             background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 30px;
+            border-radius: 12px;
+            padding: 10px;
             margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+            position: sticky;
+            top: 90px;
+            z-index: 999;
+        }
+
+        .dark-mode .sections-nav {
+            background-color: var(--dark-color);
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            gap: 5px;
+            min-width: 800px;
+        }
+
+        .nav-item {
+            flex: 1;
+        }
+
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 12px 5px;
+            border-radius: 8px;
+            transition: var(--transition);
+            background: transparent;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .nav-link:not(.active):hover {
+            background-color: rgba(74, 111, 165, 0.1);
+        }
+
+        .dark-mode .nav-link:not(.active):hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link i {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        .nav-text {
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* منطقة المحتوى */
+        .content-area {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .dark-mode .content-area {
+            background-color: var(--dark-color);
+        }
+
+        .content-section {
             display: none;
-        }
-
-        .dark-mode .section-content {
-            background-color: #2a3a4d;
-        }
-
-        .section-content.active {
-            display: block;
             animation: fadeIn 0.5s ease;
         }
 
+        .content-section.active {
+            display: block;
+        }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 2px solid #f0f5ff;
-        }
-
-        .dark-mode .section-header {
-            border-bottom: 2px solid #3a4a5d;
+            border-bottom: 2px solid var(--border-color);
         }
 
         .section-title {
-            color: var(--primary-color);
-            font-size: 1.8rem;
-            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 10px;
+            color: var(--primary-dark);
+            font-size: 1.5rem;
+            margin: 0;
         }
 
         .dark-mode .section-title {
-            color: var(--secondary-color);
+            color: #64b5f6;
         }
 
-        .section-actions {
+        .generate-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
             display: flex;
-            gap: 10px;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            transition: var(--transition);
         }
 
-        .btn {
+        .generate-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-body {
+            margin-top: 15px;
+        }
+
+        .section-textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            line-height: 1.6;
+            resize: vertical;
+            transition: var(--transition);
+            background-color: var(--light-color);
+            color: var(--text-color);
+        }
+
+        .section-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.1);
+        }
+
+        .dark-mode .section-textarea:focus {
+            border-color: #64b5f6;
+            box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2);
+        }
+
+        /* أزرار التحكم */
+        .action-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
             padding: 12px 25px;
             border: none;
-            border-radius: var(--border-radius);
+            border-radius: 10px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
+            display: flex;
             align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+            min-width: 180px;
             justify-content: center;
-            gap: 8px;
         }
 
-        .btn-primary {
-            background-color: var(--primary-color);
+        .preview-btn {
+            background-color: var(--secondary-color);
             color: white;
         }
 
-        .btn-primary:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(44, 90, 160, 0.2);
+        .preview-btn:hover {
+            background-color: #138496;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(23, 162, 184, 0.2);
         }
 
-        .btn-secondary {
-            background-color: #e9f0ff;
-            color: var(--primary-color);
-            border: 1px solid #d0ddff;
-        }
-
-        .dark-mode .btn-secondary {
-            background-color: #3a4a5d;
-            color: #e0e0e0;
-            border: 1px solid #4a5a6d;
-        }
-
-        .btn-secondary:hover {
-            background-color: #dae5ff;
-        }
-
-        .dark-mode .btn-secondary:hover {
-            background-color: #4a5a6d;
-        }
-
-        .btn-accent {
-            background-color: var(--accent-color);
-            color: #333;
-        }
-
-        .btn-accent:hover {
-            background-color: #e6a429;
-            transform: translateY(-2px);
-        }
-
-        .btn-success {
+        .export-html-btn {
             background-color: var(--success-color);
             color: white;
         }
 
-        .btn-success:hover {
+        .export-html-btn:hover {
             background-color: #218838;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(40, 167, 69, 0.2);
         }
 
-        /* محتوى القسم */
-        .ai-generated-content, .custom-content {
-            margin-bottom: 30px;
+        .export-excel-btn {
+            background-color: var(--warning-color);
+            color: #212529;
         }
 
-        .content-header {
+        .export-excel-btn:hover {
+            background-color: #e0a800;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(255, 193, 7, 0.2);
+        }
+
+        /* نافذة المعاينة */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1100;
+            overflow: auto;
+            animation: fadeInModal 0.3s ease;
+        }
+
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-container {
+            background-color: white;
+            margin: 30px auto;
+            width: 90%;
+            max-width: 1000px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            animation: slideInModal 0.4s ease;
+        }
+
+        .dark-mode .modal-container {
+            background-color: var(--dark-color);
+        }
+
+        @keyframes slideInModal {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .content-title {
-            color: var(--dark-color);
-            font-size: 1.3rem;
-            font-weight: 600;
-        }
-
-        .dark-mode .content-title {
-            color: #e0e0e0;
-        }
-
-        .ai-text-box, .custom-text-box {
-            background-color: #f9fbff;
-            border-radius: var(--border-radius);
             padding: 20px;
-            border: 1px solid #e1e8f0;
-            min-height: 150px;
-            line-height: 1.8;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .dark-mode .ai-text-box, .dark-mode .custom-text-box {
-            background-color: #3a4a5d;
-            border: 1px solid #4a5a6d;
-            color: #e0e0e0;
-        }
-
-        .custom-text-box {
-            min-height: 200px;
-            width: 100%;
-            resize: vertical;
-            border: 1px solid #e1e8f0;
-            font-family: 'Tajawal', sans-serif;
-            padding: 15px;
-            font-size: 1rem;
-            background-color: white;
-            color: #333;
-        }
-
-        .dark-mode .custom-text-box {
-            background-color: #3a4a5d;
-            border: 1px solid #4a5a6d;
-            color: #e0e0e0;
-        }
-
-        /* الشريط الجانبي */
-        .sidebar {
-            position: sticky;
-            top: 150px;
-            height: fit-content;
-        }
-
-        .progress-card, .preview-card, .actions-card {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 25px;
-            margin-bottom: 25px;
-        }
-
-        .dark-mode .progress-card, .dark-mode .preview-card, .dark-mode .actions-card {
-            background-color: #2a3a4d;
-        }
-
-        .card-title {
-            color: var(--primary-color);
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 20px;
+        .modal-title {
             display: flex;
             align-items: center;
             gap: 10px;
+            color: var(--primary-dark);
+            margin: 0;
         }
 
-        .dark-mode .card-title {
-            color: var(--secondary-color);
+        .dark-mode .modal-title {
+            color: #64b5f6;
         }
 
-        .progress-bar {
-            height: 12px;
-            background-color: #e9ecef;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            overflow: hidden;
-        }
-
-        .dark-mode .progress-bar {
-            background-color: #3a4a5d;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            border-radius: 6px;
-            width: 0%;
-            transition: width 1s ease;
-        }
-
-        .progress-text {
-            display: flex;
-            justify-content: space-between;
-            font-weight: 600;
-            color: var(--dark-color);
-        }
-
-        .dark-mode .progress-text {
-            color: #e0e0e0;
-        }
-
-        .preview-content {
-            background-color: #f9fbff;
-            border-radius: var(--border-radius);
-            padding: 20px;
-            min-height: 300px;
-            overflow-y: auto;
-            border: 1px solid #e1e8f0;
-        }
-
-        .dark-mode .preview-content {
-            background-color: #3a4a5d;
-            border: 1px solid #4a5a6d;
-        }
-
-        .preview-section {
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .dark-mode .preview-section {
-            border-bottom: 1px solid #4a5a6d;
-        }
-
-        .preview-section:last-child {
-            border-bottom: none;
-        }
-
-        .preview-section h3 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            font-size: 1.2rem;
-        }
-
-        .dark-mode .preview-section h3 {
-            color: var(--secondary-color);
-        }
-
-        .actions-card .btn {
-            width: 100%;
-            margin-bottom: 15px;
-        }
-
-        /* قسم الملفات */
-        .file-upload-area {
-            border: 2px dashed #d0ddff;
-            border-radius: var(--border-radius);
-            padding: 40px 20px;
-            text-align: center;
-            margin-bottom: 20px;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-
-        .dark-mode .file-upload-area {
-            border: 2px dashed #4a5a6d;
-        }
-
-        .file-upload-area:hover {
-            border-color: var(--secondary-color);
-            background-color: rgba(74, 144, 226, 0.05);
-        }
-
-        .file-upload-area i {
-            font-size: 3rem;
-            color: var(--secondary-color);
-            margin-bottom: 15px;
-        }
-
-        .file-upload-area p {
-            color: var(--dark-color);
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .dark-mode .file-upload-area p {
-            color: #e0e0e0;
-        }
-
-        .file-upload-area span {
-            color: #6c757d;
-            font-size: 0.9rem;
-        }
-
-        .uploaded-files {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .file-item {
-            background-color: #f0f7ff;
-            border-radius: var(--border-radius);
-            padding: 15px;
-            width: calc(50% - 8px);
-            border: 1px solid #d6e6ff;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .dark-mode .file-item {
-            background-color: #3a4a5d;
-            border: 1px solid #4a5a6d;
-        }
-
-        .file-icon {
-            width: 50px;
-            height: 50px;
-            background-color: var(--primary-color);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+        .modal-close-btn {
+            background: none;
+            border: none;
             font-size: 1.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 5px;
+            border-radius: 5px;
         }
 
-        .file-info h4 {
-            color: var(--dark-color);
-            margin-bottom: 5px;
+        .modal-close-btn:hover {
+            color: var(--text-color);
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .modal-body {
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
             font-size: 1rem;
-        }
-
-        .dark-mode .file-info h4 {
-            color: #e0e0e0;
-        }
-
-        .file-info span {
-            color: #6c757d;
-            font-size: 0.85rem;
-        }
-
-        /* قسم التواصل */
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            color: var(--dark-color);
-            margin-bottom: 8px;
-            font-weight: 600;
+            cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-
-        .dark-mode .form-group label {
-            color: #e0e0e0;
-        }
-
-        .form-group input {
-            padding: 15px;
-            border: 1px solid #e1e8f0;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
             transition: var(--transition);
-            background-color: white;
-            color: #333;
         }
 
-        .dark-mode .form-group input {
-            background-color: #3a4a5d;
-            border: 1px solid #4a5a6d;
-            color: #e0e0e0;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.2);
-        }
-
-        /* الزر الرئيسي */
-        .generate-btn-container {
-            text-align: center;
-            margin: 50px 0;
-        }
-
-        .generate-btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        .secondary-btn {
+            background-color: #6c757d;
             color: white;
-            padding: 20px 50px;
-            font-size: 1.3rem;
-            font-weight: 700;
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 10px 25px rgba(44, 90, 160, 0.3);
         }
 
-        .generate-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(44, 90, 160, 0.4);
+        .secondary-btn:hover {
+            background-color: #5a6268;
+        }
+
+        .primary-btn {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background-color: #218838;
+        }
+
+        /* محتوى المعاينة */
+        .preview-content {
+            font-family: 'Tajawal', sans-serif;
+            line-height: 1.6;
+        }
+
+        .preview-document {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .preview-document {
+            background: var(--dark-color);
+            color: var(--text-color);
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .preview-header h1 {
+            color: var(--primary-dark);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .dark-mode .preview-header h1 {
+            color: #64b5f6;
+        }
+
+        .preview-section {
+            margin-bottom: 25px;
+            page-break-inside: avoid;
+        }
+
+        .preview-section h2 {
+            color: var(--primary-dark);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dark-mode .preview-section h2 {
+            color: #64b5f6;
+        }
+
+        .preview-text {
+            white-space: pre-line;
+            font-size: 1.1rem;
         }
 
         /* الإشعارات */
         .notification {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
-            padding: 15px 25px;
-            border-radius: var(--border-radius);
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--success-color);
             color: white;
-            font-weight: 500;
-            z-index: 1000;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: var(--transition);
-            max-width: 400px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            display: none;
+            align-items: center;
+            gap: 10px;
+            z-index: 1200;
+            animation: slideInNotification 0.3s ease;
+        }
+
+        @keyframes slideInNotification {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .notification-content {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .notification.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .notification.success {
-            background-color: var(--success-color);
-        }
-
-        .notification.error {
-            background-color: #ff6b6b;
+        .notification-content i {
+            font-size: 1.5rem;
         }
 
         /* التجاوبية */
-        @media (max-width: 768px) {
-            body {
-                padding-top: 160px;
+        @media (max-width: 992px) {
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
             }
             
-            nav {
-                top: 130px;
-            }
-            
-            .teacher-name-display input {
-                width: 200px;
-                font-size: 1.5rem;
-            }
-            
-            .nav-container {
-                padding: 0 10px;
-            }
-            
-            .nav-item {
-                min-width: 100px;
-                padding: 15px;
-            }
-            
-            .section-content {
-                padding: 20px;
-            }
-            
-            .file-item {
+            .header-controls {
                 width: 100%;
+                justify-content: flex-start;
+            }
+            
+            .teacher-input-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            #teacher-name {
+                min-width: 100%;
+            }
+            
+            .nav-list {
+                gap: 3px;
+            }
+            
+            .nav-link {
+                padding: 8px 3px;
+            }
+            
+            .nav-text {
+                font-size: 0.8rem;
+            }
+            
+            .action-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .action-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .main-content {
+                padding: 20px 0;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
             }
             
             .generate-btn {
-                width: 100%;
-                justify-content: center;
+                align-self: stretch;
+            }
+            
+            .modal-container {
+                width: 95%;
+                margin: 15px auto;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .tool-header {
+                padding: 15px 0;
+            }
+            
+            .logo h1 {
+                font-size: 1.3rem;
+            }
+            
+            .control-btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .display-label,
+            .input-group label {
+                font-size: 0.9rem;
+            }
+            
+            .display-value {
+                font-size: 1rem;
+                min-width: 120px;
+            }
+            
+            .content-area {
+                padding: 15px;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+            }
+            
+            .modal-header,
+            .modal-body,
+            .modal-footer {
+                padding: 15px;
+            }
+            
+            .notification {
+                right: 15px;
+                bottom: 15px;
+                left: 15px;
+                text-align: center;
+            }
+        }
+
+        @media print {
+            .tool-header,
+            .sections-nav,
+            .action-controls,
+            .modal-overlay,
+            .notification {
+                display: none !important;
+            }
+            
+            .main-content {
+                padding: 0;
+            }
+            
+            .content-area {
+                box-shadow: none;
+                padding: 0;
+            }
+            
+            .preview-document {
+                box-shadow: none;
+                padding: 0;
             }
         }
     </style>
 </head>
-<body>
-    <!-- الهيدر -->
-    <header>
-        <div class="container header-content">
-            <div class="teacher-name-display">
-                <i class="fas fa-chalkboard-teacher"></i>
-                <input type="text" id="teacherName" placeholder="أدخل اسمك هنا" maxlength="50">
+<body class="light-mode">
+    <!-- الهيدر الرئيسي -->
+    <header class="tool-header">
+        <div class="container">
+            <div class="header-top">
+                <div class="logo">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h1 id="tool-title">أداة الملف المهني للمعلم</h1>
+                </div>
+                
+                <div class="header-controls">
+                    <div class="theme-toggle-wrapper">
+                        <button id="theme-toggle" class="control-btn" title="تبديل الوضع الليلي">
+                            <i class="fas fa-moon"></i>
+                            <span class="btn-text">الوضع الليلي</span>
+                        </button>
+                    </div>
+                    
+                    <div class="language-toggle-wrapper">
+                        <button id="language-toggle" class="control-btn" title="تبديل اللغة">
+                            <i class="fas fa-language"></i>
+                            <span class="btn-text">English</span>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="header-controls">
-                <button class="control-btn" id="languageToggle" title="تبديل اللغة">
-                    <i class="fas fa-language"></i>
-                </button>
-                <button class="control-btn" id="themeToggle" title="الوضع الليلي/النهاري">
-                    <i class="fas fa-moon"></i>
-                </button>
+            
+            <div class="header-bottom">
+                <div class="teacher-input-section">
+                    <div class="input-group">
+                        <label for="teacher-name">
+                            <i class="fas fa-user"></i>
+                            اسم المعلم:
+                        </label>
+                        <input type="text" id="teacher-name" placeholder="أدخل اسم المعلم هنا">
+                    </div>
+                    <div class="name-display-section">
+                        <span class="display-label">الاسم المعروض:</span>
+                        <span id="name-display" class="display-value">المعلم الفاضل</span>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- شريط التنقل -->
-    <nav>
-        <div class="container nav-container">
-            <a href="#" class="nav-item active" data-section="about">
-                <i class="fas fa-user"></i>
-                <span>نبذة عني</span>
-            </a>
-            <a href="#" class="nav-item" data-section="vision">
-                <i class="fas fa-eye"></i>
-                <span>الرؤية التعليمية</span>
-            </a>
-            <a href="#" class="nav-item" data-section="experience">
-                <i class="fas fa-briefcase"></i>
-                <span>الخبرات</span>
-            </a>
-            <a href="#" class="nav-item" data-section="achievements">
-                <i class="fas fa-trophy"></i>
-                <span>الإنجازات</span>
-            </a>
-            <a href="#" class="nav-item" data-section="courses">
-                <i class="fas fa-certificate"></i>
-                <span>الدورات التدريبية</span>
-            </a>
-            <a href="#" class="nav-item" data-section="skills">
-                <i class="fas fa-star"></i>
-                <span>المهارات</span>
-            </a>
-            <a href="#" class="nav-item" data-section="certificates">
-                <i class="fas fa-award"></i>
-                <span>شواهد الأداء</span>
-            </a>
-            <a href="#" class="nav-item" data-section="portfolio">
-                <i class="fas fa-images"></i>
-                <span>معرض الأعمال</span>
-            </a>
-            <a href="#" class="nav-item" data-section="contact">
-                <i class="fas fa-address-book"></i>
-                <span>بيانات التواصل</span>
-            </a>
-        </div>
-    </nav>
-
     <!-- المحتوى الرئيسي -->
-    <div class="container main-content">
-        <div class="sections-container">
-            <!-- قسم نبذة عني -->
-            <div class="section-content active" id="about-section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fas fa-user"></i> نبذة عني</h2>
-                    <div class="section-actions">
-                        <button class="btn btn-accent" id="generateAbout">
-                            <i class="fas fa-robot"></i> توليد نص ذكي
+    <main class="main-content">
+        <div class="container">
+            <!-- شريط التنقل بين الأقسام -->
+            <nav class="sections-nav" id="sections-nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="#about-me" class="nav-link active" data-section="about-me">
+                            <i class="fas fa-user-circle"></i>
+                            <span class="nav-text">نبذة عني</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#vision" class="nav-link" data-section="vision">
+                            <i class="fas fa-eye"></i>
+                            <span class="nav-text">الرؤية التعليمية</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#experiences" class="nav-link" data-section="experiences">
+                            <i class="fas fa-briefcase"></i>
+                            <span class="nav-text">الخبرات</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#achievements" class="nav-link" data-section="achievements">
+                            <i class="fas fa-trophy"></i>
+                            <span class="nav-text">الإنجازات</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#courses" class="nav-link" data-section="courses">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span class="nav-text">الدورات التدريبية</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#skills" class="nav-link" data-section="skills">
+                            <i class="fas fa-tools"></i>
+                            <span class="nav-text">المهارات</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#performance" class="nav-link" data-section="performance">
+                            <i class="fas fa-chart-line"></i>
+                            <span class="nav-text">شواهد الأداء</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#portfolio" class="nav-link" data-section="portfolio">
+                            <i class="fas fa-images"></i>
+                            <span class="nav-text">معرض الأعمال</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#contact" class="nav-link" data-section="contact">
+                            <i class="fas fa-address-card"></i>
+                            <span class="nav-text">بيانات التواصل</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <!-- منطقة المحتوى الرئيسية -->
+            <div class="content-area">
+                <!-- قسم نبذة عني -->
+                <section id="about-me" class="content-section active">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-user-circle"></i>
+                            نبذة عني
+                        </h2>
+                        <button class="generate-btn" data-section="about-me">
+                            <i class="fas fa-robot"></i>
+                            <span class="btn-text">إنشاء نص تلقائي</span>
                         </button>
                     </div>
-                </div>
-                
-                <div class="ai-generated-content">
-                    <div class="content-header">
-                        <h3 class="content-title">النص المولد تلقائياً</h3>
+                    <div class="section-body">
+                        <textarea class="section-textarea" data-section="about-me" placeholder="أدخل نبذة مختصرة عنك، خبراتك التعليمية، تخصصك، وأهدافك المهنية...">معلم متخصص في مجال التعليم الابتدائي مع خبرة تزيد عن 10 سنوات في التدريس. حاصل على درجة الماجستير في التربية الخاصة وأعمل حاليًا كمشرف تربوي. أؤمن بأهمية تطوير أساليب التعليم لتنمية مهارات الطلاب الإبداعية والنقدية.</textarea>
                     </div>
-                    <div class="ai-text-box" id="aiAboutText">
-                        انقر على زر "توليد نص ذكي" لإنشاء نبذة احترافية عنك تلقائياً.
-                    </div>
-                </div>
+                </section>
                 
-                <div class="custom-content">
-                    <div class="content-header">
-                        <h3 class="content-title">التعديل اليدوي</h3>
-                        <button class="btn btn-success" id="saveAbout">
-                            <i class="fas fa-save"></i> حفظ النص
+                <!-- قسم الرؤية التعليمية -->
+                <section id="vision" class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-eye"></i>
+                            الرؤية التعليمية
+                        </h2>
+                        <button class="generate-btn" data-section="vision">
+                            <i class="fas fa-robot"></i>
+                            <span class="btn-text">إنشاء نص تلقائي</span>
                         </button>
                     </div>
-                    <textarea class="custom-text-box" id="customAboutText" placeholder="أكتب النبذة الخاصة بك هنا..."></textarea>
-                </div>
+                    <div class="section-body">
+                        <textarea class="section-textarea" data-section="vision" placeholder="أدخل رؤيتك التعليمية وفلسفتك في التدريس...">أسعى إلى تقديم تعليم متميز يواكب متطلبات العصر، ويساهم في بناء جيل قادر على التفكير النقدي والإبداعي. أعمل على تطوير بيئة تعليمية محفزة تشجع الطلاب على الاستكشاف والتعلّم الذاتي.</textarea>
+                    </div>
+                </section>
+                
+                <!-- قسم الخبرات -->
+                <section id="experiences" class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-briefcase"></i>
+                            الخبرات
+                        </h2>
+                        <button class="generate-btn" data-section="experiences">
+                            <i class="fas fa-robot"></i>
+                            <span class="btn-text">إنشاء نص تلقائي</span>
+                        </button>
+                    </div>
+                    <div class="section-body">
+                        <textarea class="section-textarea" data-section="experiences" placeholder="أدخل خبراتك المهنية والعملية...">- معلم لغة عربية للمرحلة الابتدائية (2015-2020)
+- مشرف تربوي لمادة اللغة العربية (2020-2023)
+- منسق برامج الموهوبين في المدرسة (2018-2023)
+- عضو في لجنة تطوير المناهج المحلية (2021-2023)</textarea>
+                    </div>
+                </section>
+                
+                <!-- قسم الإنجازات -->
+                <section id="achievements" class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-trophy"></i>
+                            الإنجازات
+                        </h2>
+                        <button class="generate-btn" data-section="achievements">
+                            <i class="fas fa-robot"></i>
+                            <span class="btn-text">إنشاء نص تلقائي</span>
+                        </button>
+                    </div>
+                    <div class="section-body">
+                        <textarea class="section-textarea" data-section="achievements" placeholder="أدخل إنجازاتك المهنية والشخصية...">- الحصول على جائزة المعلم المتميز على مستوى المنطقة (2022)
+- رفع نسبة نجاح الطلاب في مادة اللغة العربية بنسبة 30%
+- تنظيم معرض للإبداعات الطلابية حصل على تغطية إعلامية محلية
+- تصميم برنامج تقييم مبتكر تم تطبيقه على مستوى المدارس في المنطقة</textarea>
+                    </div>
+                </section>
+                
+                <!-- قسم الدورات التدريبية -->
+                <section id="courses" class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-graduation-cap"></i>
+                            الدورات التدريبية
+                        </h2>
+                        <button class="generate-btn" data-section="courses">
+                            <i class="fas fa-robot"></i>
+                            <span class="btn-text">إنشاء نص تلقائي</span>
+                        </button>
+                    </div>
+                    <div class="section-body">
+                        <textarea class="section-textarea" data-section="courses" placeholder="أدخل الدورات التدريبية التي حضرتها...">- دورة "التدريس التفاعلي" - مركز التدريب التربوي (2021)
+- دورة "استراتيجيات التعلم النشط" - جامعة الملك سعود (2020)
+- دورة "التقويم البديل" - وزارة التعليم (2022)
+- دورة "تقنيات التعليم عن بعد" - أكاديمية التدريب الإلكتروني (2023)</textarea>
+                    </div>
+                </section>
+                
+                <!-- قسم المهارات -->
+                <section id="skills" class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-tools"></i>
+                            المهارات
+                        </h2>
+                        <button class="generate-btn" data-section="skills">
+                            <i class="fas fa-robot"></i>
+                            <span class="btn-text">إنشاء نص تلقائي</span>
+                        </button>
+                    </div>
+                    <div class="section-body">
+                        <textarea class="section-textarea" data-section="skills" placeholder="أدخل مهاراتك الشخصية والمهنية...">- إتقان استخدام تقنيات التعليم الحديثة
+- مهارات التواصل الفعال مع الطلاب وأولياء الأمور
+- القدرة على تصميم الأنشطة التعليمية التفاعلية
+- مهارة تحليل النتائج والتقويم المستمر
+- إتقان استخدام برامج Microsoft Office والتعليم الإلكتروني</textarea>
+                    </div>
+                </section>
+                
+                <!-- قسم شواهد الأداء -->
+                <section id="performance" class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-chart-line"></i>
+                            شواهد الأداء
+                        </h2>
+                        <button class="generate-btn" data-section="performance">
+                            <i class="fas fa-robot"></i>
+                            <span class="btn-text">إنشاء نص تلقائي</span>
+                        </button>
+                    </div>
+                    <div class="section-body">
+                        <textarea class="section-textarea" data-section="performance" placeholder="أدخل شواهد أدائك وتقارير التقييم...">- تقييم "متميز" في الأداء الوظيفي لثلاث سنوات متتالية
+- شهادات شكر من إدارة التعليم للمبادرات الناجحة
+- تقارير تقييم إيجابية من المشرفين التربويين
+- نتائج رضا أولياء الأمور بنسبة 95% حسب استبيان المدرسة</textarea>
+                    </div>
+                </section>
+                
+                <!-- قسم معرض الأعمال -->
+                <section id="portfolio" class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-images"></i>
+                            معرض الأعمال
+                        </h2>
+                        <button class="generate-btn" data-section="portfolio">
+                            <i class="fas fa-robot"></i>
+                            <span class="btn-text">إنشاء نص تلقائي</span>
+                        </button>
+                    </div>
+                    <div class="section-body">
+                        <textarea class="section-textarea" data-section="portfolio" placeholder="أدخل أعمالك ومنجزاتك البارزة...">- تصميم وحدة تعليمية تفاعلية في النحو العربي
+- إنتاج سلسلة فيديوهات تعليمية للطلاب ضعاف التحصيل
+- تأليف كتيب "نشاطات لغوية" للمرحلة الابتدائية
+- تصميم بوابة إلكترونية للأنشطة الصفية</textarea>
+                    </div>
+                </section>
+                
+                <!-- قسم بيانات التواصل -->
+                <section id="contact" class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-address-card"></i>
+                            بيانات التواصل
+                        </h2>
+                        <button class="generate-btn" data-section="contact">
+                            <i class="fas fa-robot"></i>
+                            <span class="btn-text">إنشاء نص تلقائي</span>
+                        </button>
+                    </div>
+                    <div class="section-body">
+                        <textarea class="section-textarea" data-section="contact" placeholder="أدخل بيانات التواصل الخاصة بك...">البريد الإلكتروني: teacher@example.com
+الهاتف: 0550123456
+العنوان: الرياض، المملكة العربية السعودية
+حساب LinkedIn: linkedin.com/in/teacher-name
+حساب Twitter: @teacher_name</textarea>
+                    </div>
+                </section>
             </div>
-
-            <!-- قسم الرؤية التعليمية -->
-            <div class="section-content" id="vision-section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fas fa-eye"></i> الرؤية التعليمية</h2>
-                    <div class="section-actions">
-                        <button class="btn btn-accent" id="generateVision">
-                            <i class="fas fa-robot"></i> توليد نص ذكي
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="ai-generated-content">
-                    <div class="content-header">
-                        <h3 class="content-title">النص المولد تلقائياً</h3>
-                    </div>
-                    <div class="ai-text-box" id="aiVisionText">
-                        انقر على زر "توليد نص ذكي" لإنشاء رؤية تعليمية احترافية تلقائياً.
-                    </div>
-                </div>
-                
-                <div class="custom-content">
-                    <div class="content-header">
-                        <h3 class="content-title">التعديل اليدوي</h3>
-                        <button class="btn btn-success" id="saveVision">
-                            <i class="fas fa-save"></i> حفظ النص
-                        </button>
-                    </div>
-                    <textarea class="custom-text-box" id="customVisionText" placeholder="أكتب الرؤية التعليمية الخاصة بك هنا..."></textarea>
-                </div>
-            </div>
-
-            <!-- قسم الخبرات -->
-            <div class="section-content" id="experience-section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fas fa-briefcase"></i> الخبرات التعليمية</h2>
-                    <div class="section-actions">
-                        <button class="btn btn-accent" id="generateExperience">
-                            <i class="fas fa-robot"></i> توليد نص ذكي
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="ai-generated-content">
-                    <div class="content-header">
-                        <h3 class="content-title">النص المولد تلقائياً</h3>
-                    </div>
-                    <div class="ai-text-box" id="aiExperienceText">
-                        انقر على زر "توليد نص ذكي" لإنشاء نص عن خبراتك التعليمية تلقائياً.
-                    </div>
-                </div>
-                
-                <div class="custom-content">
-                    <div class="content-header">
-                        <h3 class="content-title">التعديل اليدوي</h3>
-                        <button class="btn btn-success" id="saveExperience">
-                            <i class="fas fa-save"></i> حفظ النص
-                        </button>
-                    </div>
-                    <textarea class="custom-text-box" id="customExperienceText" placeholder="أكتب خبراتك التعليمية هنا..."></textarea>
-                </div>
-            </div>
-
-            <!-- قسم الإنجازات -->
-            <div class="section-content" id="achievements-section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fas fa-trophy"></i> الإنجازات</h2>
-                    <div class="section-actions">
-                        <button class="btn btn-accent" id="generateAchievements">
-                            <i class="fas fa-robot"></i> توليد نص ذكي
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="ai-generated-content">
-                    <div class="content-header">
-                        <h3 class="content-title">النص المولد تلقائياً</h3>
-                    </div>
-                    <div class="ai-text-box" id="aiAchievementsText">
-                        انقر على زر "توليد نص ذكي" لإنشاء نص عن إنجازاتك تلقائياً.
-                    </div>
-                </div>
-                
-                <div class="custom-content">
-                    <div class="content-header">
-                        <h3 class="content-title">التعديل اليدوي</h3>
-                        <button class="btn btn-success" id="saveAchievements">
-                            <i class="fas fa-save"></i> حفظ النص
-                        </button>
-                    </div>
-                    <textarea class="custom-text-box" id="customAchievementsText" placeholder="أكتب إنجازاتك هنا..."></textarea>
-                </div>
-            </div>
-
-            <!-- قسم الدورات التدريبية -->
-            <div class="section-content" id="courses-section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fas fa-certificate"></i> الدورات التدريبية</h2>
-                    <div class="section-actions">
-                        <button class="btn btn-accent" id="generateCourses">
-                            <i class="fas fa-robot"></i> توليد نص ذكي
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="ai-generated-content">
-                    <div class="content-header">
-                        <h3 class="content-title">النص المولد تلقائياً</h3>
-                    </div>
-                    <div class="ai-text-box" id="aiCoursesText">
-                        انقر على زر "توليد نص ذكي" لإنشاء نص عن دوراتك التدريبية تلقائياً.
-                    </div>
-                </div>
-                
-                <div class="custom-content">
-                    <div class="content-header">
-                        <h3 class="content-title">التعديل اليدوي</h3>
-                        <button class="btn btn-success" id="saveCourses">
-                            <i class="fas fa-save"></i> حفظ النص
-                        </button>
-                    </div>
-                    <textarea class="custom-text-box" id="customCoursesText" placeholder="أكتب دوراتك التدريبية هنا..."></textarea>
-                </div>
-            </div>
-
-            <!-- قسم المهارات -->
-            <div class="section-content" id="skills-section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fas fa-star"></i> المهارات</h2>
-                    <div class="section-actions">
-                        <button class="btn btn-accent" id="generateSkills">
-                            <i class="fas fa-robot"></i> توليد نص ذكي
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="ai-generated-content">
-                    <div class="content-header">
-                        <h3 class="content-title">النص المولد تلقائياً</h3>
-                    </div>
-                    <div class="ai-text-box" id="aiSkillsText">
-                        انقر على زر "توليد نص ذكي" لإنشاء نص عن مهاراتك تلقائياً.
-                    </div>
-                </div>
-                
-                <div class="custom-content">
-                    <div class="content-header">
-                        <h3 class="content-title">التعديل اليدوي</h3>
-                        <button class="btn btn-success" id="saveSkills">
-                            <i class="fas fa-save"></i> حفظ النص
-                        </button>
-                    </div>
-                    <textarea class="custom-text-box" id="customSkillsText" placeholder="أكتب مهاراتك هنا..."></textarea>
-                </div>
-            </div>
-
-            <!-- قسم شواهد الأداء -->
-            <div class="section-content" id="certificates-section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fas fa-award"></i> شواهد الأداء</h2>
-                    <div class="section-actions">
-                        <button class="btn btn-accent" id="generateCertificates">
-                            <i class="fas fa-robot"></i> توليد نص ذكي
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="ai-generated-content">
-                    <div class="content-header">
-                        <h3 class="content-title">النص المولد تلقائياً</h3>
-                    </div>
-                    <div class="ai-text-box" id="aiCertificatesText">
-                        انقر على زر "توليد نص ذكي" لإنشاء نص عن شواهد أدائك تلقائياً.
-                    </div>
-                </div>
-                
-                <div class="custom-content">
-                    <div class="content-header">
-                        <h3 class="content-title">التعديل اليدوي</h3>
-                        <button class="btn btn-success" id="saveCertificates">
-                            <i class="fas fa-save"></i> حفظ النص
-                        </button>
-                    </div>
-                    <textarea class="custom-text-box" id="customCertificatesText" placeholder="أكتب عن شواهد أدائك هنا..."></textarea>
-                </div>
-                
-                <!-- رفع الملفات -->
-                <div class="file-upload-area" id="certificatesUpload">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <p>اسحب وأفلت الشهادات هنا أو انقر للرفع</p>
-                    <span>يدعم PDF، JPG، PNG (حتى 5MB لكل ملف)</span>
-                </div>
-                <input type="file" id="certificatesInput" accept=".pdf,.jpg,.jpeg,.png" multiple style="display: none;">
-                
-                <div class="uploaded-files" id="certificatesList">
-                    <!-- الملفات المرفوعة تظهر هنا -->
-                </div>
-            </div>
-
-            <!-- قسم معرض الأعمال -->
-            <div class="section-content" id="portfolio-section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fas fa-images"></i> معرض الأعمال</h2>
-                    <div class="section-actions">
-                        <button class="btn btn-accent" id="generatePortfolio">
-                            <i class="fas fa-robot"></i> توليد نص ذكي
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="ai-generated-content">
-                    <div class="content-header">
-                        <h3 class="content-title">النص المولد تلقائياً</h3>
-                    </div>
-                    <div class="ai-text-box" id="aiPortfolioText">
-                        انقر على زر "توليد نص ذكي" لإنشاء نص عن معرض أعمالك تلقائياً.
-                    </div>
-                </div>
-                
-                <div class="custom-content">
-                    <div class="content-header">
-                        <h3 class="content-title">التعديل اليدوي</h3>
-                        <button class="btn btn-success" id="savePortfolio">
-                            <i class="fas fa-save"></i> حفظ النص
-                        </button>
-                    </div>
-                    <textarea class="custom-text-box" id="customPortfolioText" placeholder="أكتب عن معرض أعمالك هنا..."></textarea>
-                </div>
-                
-                <!-- رفع الملفات -->
-                <div class="file-upload-area" id="portfolioUpload">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <p>اسحب وأفلت ملفات معرض الأعمال هنا أو انقر للرفع</p>
-                    <span>يدعم الصور، PDF، والملفات الأخرى (حتى 10MB لكل ملف)</span>
-                </div>
-                <input type="file" id="portfolioInput" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.ppt,.pptx" multiple style="display: none;">
-                
-                <div class="uploaded-files" id="portfolioList">
-                    <!-- الملفات المرفوعة تظهر هنا -->
-                </div>
-            </div>
-
-            <!-- قسم بيانات التواصل -->
-            <div class="section-content" id="contact-section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fas fa-address-book"></i> بيانات التواصل</h2>
-                    <div class="section-actions">
-                        <button class="btn btn-accent" id="generateContact">
-                            <i class="fas fa-robot"></i> توليد نص ذكي
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="ai-generated-content">
-                    <div class="content-header">
-                        <h3 class="content-title">النص المولد تلقائياً</h3>
-                    </div>
-                    <div class="ai-text-box" id="aiContactText">
-                        انقر على زر "توليد نص ذكي" لإنشاء نص احترافي لبيانات التواصل تلقائياً.
-                    </div>
-                </div>
-                
-                <div class="custom-content">
-                    <div class="content-header">
-                        <h3 class="content-title">التعديل اليدوي</h3>
-                        <button class="btn btn-success" id="saveContact">
-                            <i class="fas fa-save"></i> حفظ البيانات
-                        </button>
-                    </div>
-                    
-                    <div class="contact-form">
-                        <div class="form-group">
-                            <label for="phone"><i class="fas fa-phone"></i> رقم الجوال</label>
-                            <input type="text" id="phone" placeholder="مثال: 0551234567">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
-                            <input type="email" id="email" placeholder="مثال: name@example.com">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="whatsapp"><i class="fab fa-whatsapp"></i> رابط الواتساب</label>
-                            <input type="text" id="whatsapp" placeholder="مثال: https://wa.me/966551234567">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="twitter"><i class="fab fa-twitter"></i> رابط تويتر (X)</label>
-                            <input type="text" id="twitter" placeholder="مثال: https://twitter.com/username">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="linkedin"><i class="fab fa-linkedin"></i> رابط LinkedIn</label>
-                            <input type="text" id="linkedin" placeholder="مثال: https://linkedin.com/in/username">
-                        </div>
-                    </div>
-                </div>
+            
+            <!-- أزرار التحكم الرئيسية -->
+            <div class="action-controls">
+                <button id="preview-btn" class="action-btn preview-btn">
+                    <i class="fas fa-eye"></i>
+                    <span class="btn-text">معاينة الملف</span>
+                </button>
+                <button id="export-html-btn" class="action-btn export-html-btn">
+                    <i class="fas fa-file-code"></i>
+                    <span class="btn-text">تصدير HTML</span>
+                </button>
+                <button id="export-excel-btn" class="action-btn export-excel-btn">
+                    <i class="fas fa-file-excel"></i>
+                    <span class="btn-text">تصدير Excel</span>
+                </button>
             </div>
         </div>
+    </main>
 
-        <!-- الشريط الجانبي -->
-        <div class="sidebar">
-            <!-- تقدم الإكمال -->
-            <div class="progress-card">
-                <h3 class="card-title"><i class="fas fa-chart-line"></i> تقدم الإكمال</h3>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <div class="progress-text">
-                    <span>الإكمال</span>
-                    <span id="progressPercent">0%</span>
-                </div>
-                <p style="margin-top: 15px; color: #6c757d; font-size: 0.9rem;">
-                    أكمل جميع الأقسام لإنشاء ملف مهني متكامل
-                </p>
+    <!-- نافذة المعاينة -->
+    <div id="preview-modal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <i class="fas fa-file-alt"></i>
+                    معاينة الملف المهني
+                </h2>
+                <button class="modal-close-btn" id="modal-close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-
-            <!-- معاينة سريعة -->
-            <div class="preview-card">
-                <h3 class="card-title"><i class="fas fa-eye"></i> معاينة سريعة</h3>
-                <div class="preview-content" id="quickPreview">
-                    <div class="preview-section">
-                        <h3>الاسم</h3>
-                        <p id="previewName">لم يتم إدخال الاسم بعد</p>
-                    </div>
-                    <div class="preview-section">
-                        <h3>نبذة مختصرة</h3>
-                        <p id="previewBio">لم يتم إدخال النبذة بعد</p>
-                    </div>
-                    <div class="preview-section">
-                        <h3>بيانات التواصل</h3>
-                        <p id="previewContact">لم يتم إدخال بيانات التواصل بعد</p>
-                    </div>
-                </div>
+            <div class="modal-body">
+                <div id="preview-content" class="preview-content"></div>
             </div>
-
-            <!-- الإجراءات السريعة -->
-            <div class="actions-card">
-                <h3 class="card-title"><i class="fas fa-bolt"></i> إجراءات سريعة</h3>
-                <button class="btn btn-primary" id="saveAllBtn">
-                    <i class="fas fa-save"></i> حفظ كل البيانات
+            <div class="modal-footer">
+                <button id="close-preview-btn" class="modal-btn secondary-btn">
+                    <i class="fas fa-times"></i>
+                    <span>إغلاق</span>
                 </button>
-                <button class="btn btn-secondary" id="loadSampleBtn">
-                    <i class="fas fa-magic"></i> تحميل بيانات تجريبية
-                </button>
-                <button class="btn btn-secondary" id="resetAllBtn">
-                    <i class="fas fa-trash-alt"></i> مسح كل البيانات
-                </button>
-                <button class="btn btn-success" id="exportDataBtn">
-                    <i class="fas fa-download"></i> تصدير البيانات
+                <button id="download-preview-btn" class="modal-btn primary-btn">
+                    <i class="fas fa-download"></i>
+                    <span>تحميل HTML</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- زر إنشاء الملف المهني -->
-    <div class="container generate-btn-container">
-        <button class="generate-btn" id="generatePortfolioBtn">
-            <i class="fas fa-file-code"></i> إنشاء الملف المهني النهائي
-        </button>
+    <!-- إشعار النجاح -->
+    <div id="success-notification" class="notification">
+        <div class="notification-content">
+            <i class="fas fa-check-circle"></i>
+            <span id="notification-message">تم العملية بنجاح!</span>
+        </div>
     </div>
-
-    <!-- الإشعارات -->
-    <div id="notification" class="notification"></div>
 
     <script>
-        // ============== البيانات والمتغيرات ==============
-        let teacherData = {
-            name: '',
-            about: { ai: '', custom: '' },
-            vision: { ai: '', custom: '' },
-            experience: { ai: '', custom: '' },
-            achievements: { ai: '', custom: '' },
-            courses: { ai: '', custom: '' },
-            skills: { ai: '', custom: '' },
-            certificates: { ai: '', custom: '', files: [] },
-            portfolio: { ai: '', custom: '', files: [] },
-            contact: { 
-                ai: '', 
-                custom: '',
-                phone: '',
-                email: '',
-                whatsapp: '',
-                twitter: '',
-                linkedin: ''
-            }
-        };
-        
-        let currentLanguage = 'ar';
-        let isDarkMode = false;
-        let currentSection = 'about';
-        
-        // ============== عناصر DOM ==============
-        const teacherNameInput = document.getElementById('teacherName');
-        const languageToggle = document.getElementById('languageToggle');
-        const themeToggle = document.getElementById('themeToggle');
-        const navItems = document.querySelectorAll('.nav-item');
-        const sections = document.querySelectorAll('.section-content');
-        const generateButtons = document.querySelectorAll('[id^="generate"]');
-        const saveButtons = document.querySelectorAll('[id^="save"]');
-        const notification = document.getElementById('notification');
-        const progressFill = document.getElementById('progressFill');
-        const progressPercent = document.getElementById('progressPercent');
-        const saveAllBtn = document.getElementById('saveAllBtn');
-        const loadSampleBtn = document.getElementById('loadSampleBtn');
-        const resetAllBtn = document.getElementById('resetAllBtn');
-        const exportDataBtn = document.getElementById('exportDataBtn');
-        const generatePortfolioBtn = document.getElementById('generatePortfolioBtn');
-        
-        // عناصر المعاينة السريعة
-        const previewName = document.getElementById('previewName');
-        const previewBio = document.getElementById('previewBio');
-        const previewContact = document.getElementById('previewContact');
-        
-        // ============== تهيئة التطبيق ==============
-        document.addEventListener('DOMContentLoaded', () => {
-            // تحميل البيانات المحفوظة
-            loadSavedData();
-            
-            // إضافة مستمعي الأحداث
-            setupEventListeners();
-            
-            // تحديث المعاينة والتقدم
-            updateProgress();
-            updatePreview();
-            
-            // تفعيل الوضع الليلي إذا كان محفوظ
-            if (localStorage.getItem('darkMode') === 'true') {
-                toggleDarkMode();
-            }
-        });
-        
-        // ============== إعداد مستمعي الأحداث ==============
-        function setupEventListeners() {
-            // تبديل اللغة
-            languageToggle.addEventListener('click', toggleLanguage);
-            
-            // تبديل الوضع الليلي
-            themeToggle.addEventListener('click', toggleDarkMode);
-            
-            // تغيير اسم المعلم
-            teacherNameInput.addEventListener('input', (e) => {
-                teacherData.name = e.target.value;
-                updatePreview();
-                saveToLocalStorage();
-            });
-            
-            // التنقل بين الأقسام
-            navItems.forEach(item => {
-                item.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const sectionId = item.getAttribute('data-section');
-                    switchSection(sectionId);
-                });
-            });
-            
-            // أزرار التوليد التلقائي
-            document.getElementById('generateAbout').addEventListener('click', () => generateAIText('about'));
-            document.getElementById('generateVision').addEventListener('click', () => generateAIText('vision'));
-            document.getElementById('generateExperience').addEventListener('click', () => generateAIText('experience'));
-            document.getElementById('generateAchievements').addEventListener('click', () => generateAIText('achievements'));
-            document.getElementById('generateCourses').addEventListener('click', () => generateAIText('courses'));
-            document.getElementById('generateSkills').addEventListener('click', () => generateAIText('skills'));
-            document.getElementById('generateCertificates').addEventListener('click', () => generateAIText('certificates'));
-            document.getElementById('generatePortfolio').addEventListener('click', () => generateAIText('portfolio'));
-            document.getElementById('generateContact').addEventListener('click', () => generateAIText('contact'));
-            
-            // أزرار الحفظ
-            document.getElementById('saveAbout').addEventListener('click', () => saveCustomText('about'));
-            document.getElementById('saveVision').addEventListener('click', () => saveCustomText('vision'));
-            document.getElementById('saveExperience').addEventListener('click', () => saveCustomText('experience'));
-            document.getElementById('saveAchievements').addEventListener('click', () => saveCustomText('achievements'));
-            document.getElementById('saveCourses').addEventListener('click', () => saveCustomText('courses'));
-            document.getElementById('saveSkills').addEventListener('click', () => saveCustomText('skills'));
-            document.getElementById('saveCertificates').addEventListener('click', () => saveCustomText('certificates'));
-            document.getElementById('savePortfolio').addEventListener('click', () => saveCustomText('portfolio'));
-            document.getElementById('saveContact').addEventListener('click', saveContactData);
-            
-            // رفع الملفات
-            document.getElementById('certificatesUpload').addEventListener('click', () => {
-                document.getElementById('certificatesInput').click();
-            });
-            
-            document.getElementById('portfolioUpload').addEventListener('click', () => {
-                document.getElementById('portfolioInput').click();
-            });
-            
-            document.getElementById('certificatesInput').addEventListener('change', (e) => handleFileUpload(e, 'certificates'));
-            document.getElementById('portfolioInput').addEventListener('change', (e) => handleFileUpload(e, 'portfolio'));
-            
-            // الإجراءات السريعة
-            saveAllBtn.addEventListener('click', saveAllData);
-            loadSampleBtn.addEventListener('click', loadSampleData);
-            resetAllBtn.addEventListener('click', resetAllData);
-            exportDataBtn.addEventListener('click', exportData);
-            generatePortfolioBtn.addEventListener('click', generateFinalPortfolio);
-            
-            // تحديث النصوص تلقائياً عند الكتابة
-            document.querySelectorAll('.custom-text-box').forEach(textarea => {
-                textarea.addEventListener('input', (e) => {
-                    updatePreview();
-                });
-            });
-            
-            // تحديث بيانات التواصل عند الكتابة
-            document.querySelectorAll('.contact-form input').forEach(input => {
-                input.addEventListener('input', (e) => {
-                    updatePreview();
-                });
-            });
-        }
-        
-        // ============== وظائف التنقل ==============
-        function switchSection(sectionId) {
-            // تحديث القسم النشط في شريط التنقل
-            navItems.forEach(item => {
-                item.classList.remove('active');
-                if (item.getAttribute('data-section') === sectionId) {
-                    item.classList.add('active');
+        // تطبيق أداة الملف المهني للمعلم
+        document.addEventListener('DOMContentLoaded', function() {
+            // الحالة الأساسية للتطبيق
+            const appState = {
+                teacherName: 'المعلم الفاضل',
+                currentLanguage: 'ar',
+                currentTheme: 'light-mode',
+                sections: {
+                    'about-me': '',
+                    'vision': '',
+                    'experiences': '',
+                    'achievements': '',
+                    'courses': '',
+                    'skills': '',
+                    'performance': '',
+                    'portfolio': '',
+                    'contact': ''
+                },
+                sectionNames: {
+                    'ar': {
+                        'about-me': 'نبذة عني',
+                        'vision': 'الرؤية التعليمية',
+                        'experiences': 'الخبرات',
+                        'achievements': 'الإنجازات',
+                        'courses': 'الدورات التدريبية',
+                        'skills': 'المهارات',
+                        'performance': 'شواهد الأداء',
+                        'portfolio': 'معرض الأعمال',
+                        'contact': 'بيانات التواصل'
+                    },
+                    'en': {
+                        'about-me': 'About Me',
+                        'vision': 'Educational Vision',
+                        'experiences': 'Experiences',
+                        'achievements': 'Achievements',
+                        'courses': 'Training Courses',
+                        'skills': 'Skills',
+                        'performance': 'Performance Evidence',
+                        'portfolio': 'Portfolio',
+                        'contact': 'Contact Information'
+                    }
+                },
+                uiTexts: {
+                    'ar': {
+                        'toolTitle': 'أداة الملف المهني للمعلم',
+                        'teacherNamePlaceholder': 'أدخل اسم المعلم هنا',
+                        'nameDisplayLabel': 'الاسم المعروض:',
+                        'themeToggle': 'الوضع الليلي',
+                        'languageToggle': 'English',
+                        'generateText': 'إنشاء نص تلقائي',
+                        'preview': 'معاينة الملف',
+                        'exportHTML': 'تصدير HTML',
+                        'exportExcel': 'تصدير Excel',
+                        'previewTitle': 'معاينة الملف المهني',
+                        'close': 'إغلاق',
+                        'downloadHTML': 'تحميل HTML',
+                        'notificationMessages': {
+                            'htmlExported': 'تم تصدير ملف HTML بنجاح',
+                            'excelExported': 'تم تصدير ملف Excel بنجاح',
+                            'autoGenerated': 'تم إنشاء النص التلقائي بنجاح',
+                            'dataSaved': 'تم حفظ البيانات'
+                        }
+                    },
+                    'en': {
+                        'toolTitle': 'Teacher Professional Portfolio Tool',
+                        'teacherNamePlaceholder': 'Enter teacher name here',
+                        'nameDisplayLabel': 'Display Name:',
+                        'themeToggle': 'Dark Mode',
+                        'languageToggle': 'العربية',
+                        'generateText': 'Generate Auto Text',
+                        'preview': 'Preview File',
+                        'exportHTML': 'Export HTML',
+                        'exportExcel': 'Export Excel',
+                        'previewTitle': 'Professional File Preview',
+                        'close': 'Close',
+                        'downloadHTML': 'Download HTML',
+                        'notificationMessages': {
+                            'htmlExported': 'HTML file exported successfully',
+                            'excelExported': 'Excel file exported successfully',
+                            'autoGenerated': 'Auto text generated successfully',
+                            'dataSaved': 'Data saved successfully'
+                        }
+                    }
                 }
-            });
-            
-            // إظهار القسم المحدد وإخفاء الآخرين
-            sections.forEach(section => {
-                section.classList.remove('active');
-                if (section.id === `${sectionId}-section`) {
-                    section.classList.add('active');
-                }
-            });
-            
-            currentSection = sectionId;
-        }
-        
-        // ============== توليد النصوص بالذكاء الاصطناعي ==============
-        function generateAIText(section) {
-            // في التطبيق الحقيقي، هنا سيتم استدعاء واجهة برمجة تطبيقات الذكاء الاصطناعي
-            // لكننا سنستخدم نصوصاً مخزنة مسبقاً للعرض التوضيحي
-            
-            const aiTexts = {
-                about: "أنا معلم متخصص في مجال التعليم، حاصل على شهادة الماجستير في التربية، وأملك خبرة تزيد عن 10 سنوات في التدريس. أؤمن بأهمية التعليم التفاعلي والتطوير المستمر للمناهج التعليمية. أسعى دائماً إلى إلهام طلابي وتحفيزهم للوصول إلى أقصى إمكاناتهم الأكاديمية والشخصية.",
-                
-                vision: "رؤيتي التعليمية تتمحور حول بناء جيل من المتعلمين المستقلين القادرين على التفكير النقدي والإبداعي. أهدف إلى خلق بيئة تعليمية محفزة تدمج بين التكنولوجيا الحديثة والطرق التعليمية التقليدية، مما يمكن الطلاب من اكتساب المعرفة والمهارات الحياتية اللازمة للنجاح في القرن الحادي والعشرين.",
-                
-                experience: "أملك خبرة واسعة في التدريس تشمل أكثر من 10 سنوات في مجال التعليم. عملت في عدة مدارس مرموقة وقمت بتدريس مختلف المواد الدراسية. قمت بتطوير مناهج تعليمية مبتكرة وحصلت على تقييمات متميزة من الطلاب والإدارة. كما أشرفت على تدريب المعلمين الجدد وشاركت في لجان تطوير المناهج التعليمية.",
-                
-                achievements: "من أبرز إنجازاتي: الحصول على جائزة المعلم المتميز على مستوى المنطقة ثلاث مرات، تطوير برنامج تعليمي مبتكر حصل على اعتماد وزارة التعليم، قيادة فريق تحسين نتائج الطلاب بنسبة 40% خلال ثلاث سنوات، نشر بحثين في مجلات تربوية محكمة، وتقديم ورش عمل للمعلمين على مستوى الوطن.",
-                
-                courses: "حضرت العديد من الدورات التدريبية المتميزة منها: دورة استراتيجيات التدريس الحديثة (120 ساعة)، دورة استخدام التكنولوجيا في التعليم (80 ساعة)، دورة التقييم التربوي الفعال (60 ساعة)، دورة التعامل مع صعوبات التعلم (90 ساعة)، دورة القيادة التربوية (100 ساعة)، ودورة الإبداع في تصميم الأنشطة الصفية (70 ساعة).",
-                
-                skills: "أتمتع بمهارات تعليمية وتقنية متعددة منها: إتقان استراتيجيات التعليم التفاعلي، تصميم المناهج التعليمية، استخدام التكنولوجيا في التعليم، إدارة الصف الفعالة، التقييم التربوي، التدريب والتوجيه، البحث التربوي، التواصل الفعال مع أولياء الأمور، العمل الجماعي، والتفكير الإبداعي في حل المشكلات التعليمية.",
-                
-                certificates: "حاصل على عدة شهادات أداء معتمدة منها: شهادة المعلم المتميز من وزارة التعليم، شهادة تقدير لأفضل أداء تعليمي، شهادة مشاركة في مؤتمر التطوير التربوي، شهادة إتمام برنامج القيادة التربوية، شهادة تقدير لتميز نتائج الطلاب، وشهادة مشاركة في تأليف كتاب تعليمي مساند للمنهج الدراسي.",
-                
-                portfolio: "يضم معرض أعمالي: تصميم منهج تعليمي متكامل للصف السادس، تطوير دليل المعلم للصفوف المتوسطة، إنشاء مكتبة رقمية للمصادر التعليمية، تصميم أنشطة تعليمية تفاعلية، إنتاج فيديوهات تعليمية لشرح الدروس الصعبة، وتصميم أدوات تقييم إلكترونية للطلاب.",
-                
-                contact: "يمكن التواصل معي عبر: رقم الجوال: 0551234567، البريد الإلكتروني: teacher@example.com، رابط الواتساب: https://wa.me/966551234567، حساب تويتر: @TeacherProfile، حساب LinkedIn: linkedin.com/in/teacherprofile. أنا متاح للإجابة على الاستفسارات والتعاون في المشاريع التعليمية."
             };
-            
-            // تحديث النص في الواجهة
-            const aiTextBox = document.getElementById(`ai${capitalizeFirstLetter(section)}Text`);
-            if (aiTextBox) {
-                aiTextBox.textContent = aiTexts[section];
-                teacherData[section].ai = aiTexts[section];
-                showNotification('تم توليد النص بنجاح', 'success');
-                saveToLocalStorage();
-                updateProgress();
-            }
-        }
-        
-        // ============== حفظ النصوص المخصصة ==============
-        function saveCustomText(section) {
-            const textarea = document.getElementById(`custom${capitalizeFirstLetter(section)}Text`);
-            if (textarea) {
-                teacherData[section].custom = textarea.value;
-                showNotification('تم حفظ النص بنجاح', 'success');
-                saveToLocalStorage();
-                updateProgress();
-            }
-        }
-        
-        // ============== حفظ بيانات التواصل ==============
-        function saveContactData() {
-            teacherData.contact.phone = document.getElementById('phone').value;
-            teacherData.contact.email = document.getElementById('email').value;
-            teacherData.contact.whatsapp = document.getElementById('whatsapp').value;
-            teacherData.contact.twitter = document.getElementById('twitter').value;
-            teacherData.contact.linkedin = document.getElementById('linkedin').value;
-            
-            showNotification('تم حفظ بيانات التواصل بنجاح', 'success');
-            saveToLocalStorage();
-            updateProgress();
-        }
-        
-        // ============== رفع الملفات ==============
-        function handleFileUpload(event, section) {
-            const files = event.target.files;
-            if (files.length > 0) {
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
-                    const fileSize = (file.size / (1024 * 1024)).toFixed(2); // بالميغابايت
-                    
-                    // التحقق من حجم الملف
-                    if (fileSize > (section === 'certificates' ? 5 : 10)) {
-                        showNotification(`حجم الملف ${file.name} كبير جداً`, 'error');
-                        continue;
-                    }
-                    
-                    // إضافة الملف إلى البيانات
-                    teacherData[section].files.push({
-                        name: file.name,
-                        size: fileSize + ' MB',
-                        type: file.type,
-                        date: new Date().toLocaleDateString('ar-SA')
-                    });
-                }
+
+            // عناصر DOM الرئيسية
+            const DOM = {
+                body: document.body,
+                teacherNameInput: document.getElementById('teacher-name'),
+                nameDisplay: document.getElementById('name-display'),
+                themeToggle: document.getElementById('theme-toggle'),
+                languageToggle: document.getElementById('language-toggle'),
+                navLinks: document.querySelectorAll('.nav-link'),
+                contentSections: document.querySelectorAll('.content-section'),
+                generateButtons: document.querySelectorAll('.generate-btn'),
+                textareas: document.querySelectorAll('.section-textarea'),
+                previewBtn: document.getElementById('preview-btn'),
+                exportHtmlBtn: document.getElementById('export-html-btn'),
+                exportExcelBtn: document.getElementById('export-excel-btn'),
+                previewModal: document.getElementById('preview-modal'),
+                modalCloseBtn: document.getElementById('modal-close-btn'),
+                closePreviewBtn: document.getElementById('close-preview-btn'),
+                downloadPreviewBtn: document.getElementById('download-preview-btn'),
+                previewContent: document.getElementById('preview-content'),
+                successNotification: document.getElementById('success-notification'),
+                notificationMessage: document.getElementById('notification-message')
+            };
+
+            // تهيئة التطبيق
+            function initApp() {
+                loadSavedData();
+                setupEventListeners();
+                updateUILanguage();
                 
-                // تحديث عرض الملفات
-                updateFileList(section);
-                showNotification(`تم رفع ${files.length} ملف بنجاح`, 'success');
-                saveToLocalStorage();
-                updateProgress();
+                // إضافة محتوى أولي للنصوص
+                initializeTextareas();
             }
-        }
-        
-        // ============== تحديث قائمة الملفات ==============
-        function updateFileList(section) {
-            const fileList = document.getElementById(`${section}List`);
-            if (!fileList) return;
-            
-            fileList.innerHTML = '';
-            
-            teacherData[section].files.forEach((file, index) => {
-                const fileItem = document.createElement('div');
-                fileItem.className = 'file-item';
-                fileItem.innerHTML = `
-                    <div class="file-icon">
-                        <i class="${getFileIcon(file.type)}"></i>
-                    </div>
-                    <div class="file-info">
-                        <h4>${file.name}</h4>
-                        <span>${file.size} • ${file.date}</span>
-                    </div>
-                `;
-                fileList.appendChild(fileItem);
-            });
-        }
-        
-        // ============== تحديث التقدم ==============
-        function updateProgress() {
-            let filledSections = 0;
-            const totalSections = 9; // عدد الأقسام الرئيسية
-            
-            // حساب الأقسام المكتملة
-            if (teacherData.name.trim()) filledSections++;
-            if (teacherData.about.custom.trim() || teacherData.about.ai.trim()) filledSections++;
-            if (teacherData.vision.custom.trim() || teacherData.vision.ai.trim()) filledSections++;
-            if (teacherData.experience.custom.trim() || teacherData.experience.ai.trim()) filledSections++;
-            if (teacherData.achievements.custom.trim() || teacherData.achievements.ai.trim()) filledSections++;
-            if (teacherData.courses.custom.trim() || teacherData.courses.ai.trim()) filledSections++;
-            if (teacherData.skills.custom.trim() || teacherData.skills.ai.trim()) filledSections++;
-            if (teacherData.contact.phone.trim() || teacherData.contact.email.trim()) filledSections++;
-            if (teacherData.certificates.files.length > 0 || teacherData.portfolio.files.length > 0) filledSections++;
-            
-            // حساب النسبة المئوية
-            const percentage = Math.round((filledSections / totalSections) * 100);
-            
-            // تحديث العرض
-            progressFill.style.width = `${percentage}%`;
-            progressPercent.textContent = `${percentage}%`;
-        }
-        
-        // ============== تحديث المعاينة السريعة ==============
-        function updatePreview() {
-            // تحديث الاسم
-            previewName.textContent = teacherNameInput.value || 'لم يتم إدخال الاسم بعد';
-            
-            // تحديث النبذة
-            const aboutText = teacherData.about.custom || teacherData.about.ai || 
-                             document.getElementById('customAboutText')?.value || 
-                             'لم يتم إدخال النبذة بعد';
-            previewBio.textContent = aboutText.length > 150 ? aboutText.substring(0, 150) + '...' : aboutText;
-            
-            // تحديث بيانات التواصل
-            const phone = document.getElementById('phone')?.value || teacherData.contact.phone;
-            const email = document.getElementById('email')?.value || teacherData.contact.email;
-            
-            let contactText = 'لم يتم إدخال بيانات التواصل بعد';
-            if (phone || email) {
-                contactText = '';
-                if (phone) contactText += `هاتف: ${phone}`;
-                if (email) contactText += `${phone ? '، ' : ''}بريد: ${email}`;
-            }
-            previewContact.textContent = contactText;
-        }
-        
-        // ============== حفظ كل البيانات ==============
-        function saveAllData() {
-            // حفظ جميع النصوص المخصصة
-            saveCustomText('about');
-            saveCustomText('vision');
-            saveCustomText('experience');
-            saveCustomText('achievements');
-            saveCustomText('courses');
-            saveCustomText('skills');
-            saveCustomText('certificates');
-            saveCustomText('portfolio');
-            saveContactData();
-            
-            showNotification('تم حفظ جميع البيانات بنجاح', 'success');
-        }
-        
-        // ============== تحميل بيانات تجريبية ==============
-        function loadSampleData() {
-            if (confirm('هل تريد تحميل بيانات تجريبية؟ سيتم استبدال البيانات الحالية.')) {
-                // تعبئة البيانات التجريبية
-                teacherNameInput.value = 'أحمد محمد العلي';
-                teacherData.name = 'أحمد محمد العلي';
+
+            // إعداد مستمعي الأحداث
+            function setupEventListeners() {
+                // اسم المعلم
+                DOM.teacherNameInput.addEventListener('input', handleTeacherNameChange);
                 
-                // تعبئة النصوص
-                const sections = ['about', 'vision', 'experience', 'achievements', 'courses', 'skills', 'certificates', 'portfolio', 'contact'];
-                sections.forEach(section => {
-                    generateAIText(section);
-                    
-                    const textarea = document.getElementById(`custom${capitalizeFirstLetter(section)}Text`);
-                    if (textarea) {
-                        textarea.value = `هذا نص مخصص للقسم: ${section}. يمكنك تعديله كما تريد.`;
-                        teacherData[section].custom = textarea.value;
+                // تبديل الوضع الليلي/النهاري
+                DOM.themeToggle.addEventListener('click', toggleTheme);
+                
+                // تبديل اللغة
+                DOM.languageToggle.addEventListener('click', toggleLanguage);
+                
+                // التنقل بين الأقسام
+                DOM.navLinks.forEach(link => {
+                    link.addEventListener('click', handleNavClick);
+                });
+                
+                // إنشاء نص تلقائي
+                DOM.generateButtons.forEach(btn => {
+                    btn.addEventListener('click', handleAutoGenerate);
+                });
+                
+                // تحديث النصوص
+                DOM.textareas.forEach(textarea => {
+                    textarea.addEventListener('input', handleTextareaChange);
+                });
+                
+                // أزرار التحكم الرئيسية
+                DOM.previewBtn.addEventListener('click', showPreview);
+                DOM.exportHtmlBtn.addEventListener('click', exportToHTML);
+                DOM.exportExcelBtn.addEventListener('click', exportToExcel);
+                
+                // إغلاق نافذة المعاينة
+                DOM.modalCloseBtn.addEventListener('click', closePreviewModal);
+                DOM.closePreviewBtn.addEventListener('click', closePreviewModal);
+                DOM.downloadPreviewBtn.addEventListener('click', () => {
+                    exportToHTML();
+                    closePreviewModal();
+                });
+                
+                // إغلاق النافذة عند النقر خارجها
+                DOM.previewModal.addEventListener('click', (e) => {
+                    if (e.target === DOM.previewModal) {
+                        closePreviewModal();
                     }
                 });
                 
-                // تعبئة بيانات التواصل
-                document.getElementById('phone').value = '0551234567';
-                document.getElementById('email').value = 'ahmed.ali@school.edu.sa';
-                document.getElementById('whatsapp').value = 'https://wa.me/966551234567';
-                document.getElementById('twitter').value = 'https://twitter.com/ahmed_ali_edu';
-                document.getElementById('linkedin').value = 'https://linkedin.com/in/ahmed-ali-educator';
-                
-                saveContactData();
-                
-                // إضافة ملفات تجريبية
-                teacherData.certificates.files = [
-                    { name: 'شهادة المعلم المتميز.pdf', size: '2.4 MB', type: 'application/pdf', date: '2023-05-15' },
-                    { name: 'شهادة التدريب.jpg', size: '1.8 MB', type: 'image/jpeg', date: '2023-08-22' }
-                ];
-                
-                teacherData.portfolio.files = [
-                    { name: 'تصميم المنهج التعليمي.docx', size: '3.2 MB', type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', date: '2023-10-10' },
-                    { name: 'عرض تقديمي للورشة.pptx', size: '4.5 MB', type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation', date: '2023-11-05' }
-                ];
-                
-                updateFileList('certificates');
-                updateFileList('portfolio');
-                
-                showNotification('تم تحميل البيانات التجريبية بنجاح', 'success');
-                updateProgress();
-                updatePreview();
-                saveToLocalStorage();
+                // إغلاق الإشعار تلقائيًا
+                DOM.successNotification.addEventListener('click', () => {
+                    DOM.successNotification.style.display = 'none';
+                });
             }
-        }
-        
-        // ============== مسح كل البيانات ==============
-        function resetAllData() {
-            if (confirm('هل أنت متأكد من مسح جميع البيانات؟ لا يمكن التراجع عن هذا الإجراء.')) {
-                // إعادة تعيين جميع الحقول
-                teacherNameInput.value = '';
-                teacherData = {
-                    name: '',
-                    about: { ai: '', custom: '' },
-                    vision: { ai: '', custom: '' },
-                    experience: { ai: '', custom: '' },
-                    achievements: { ai: '', custom: '' },
-                    courses: { ai: '', custom: '' },
-                    skills: { ai: '', custom: '' },
-                    certificates: { ai: '', custom: '', files: [] },
-                    portfolio: { ai: '', custom: '', files: [] },
-                    contact: { 
-                        ai: '', 
-                        custom: '',
-                        phone: '',
-                        email: '',
-                        whatsapp: '',
-                        twitter: '',
-                        linkedin: ''
-                    }
+
+            // معالجة تغيير اسم المعلم
+            function handleTeacherNameChange() {
+                const name = DOM.teacherNameInput.value.trim();
+                appState.teacherName = name || (appState.currentLanguage === 'ar' ? 'المعلم الفاضل' : 'Respected Teacher');
+                DOM.nameDisplay.textContent = appState.teacherName;
+                saveData();
+                showNotification(appState.uiTexts[appState.currentLanguage].notificationMessages.dataSaved);
+            }
+
+            // تبديل الوضع الليلي/النهاري
+            function toggleTheme() {
+                if (DOM.body.classList.contains('dark-mode')) {
+                    DOM.body.classList.remove('dark-mode');
+                    DOM.body.classList.add('light-mode');
+                    appState.currentTheme = 'light-mode';
+                    updateThemeButton(false);
+                } else {
+                    DOM.body.classList.remove('light-mode');
+                    DOM.body.classList.add('dark-mode');
+                    appState.currentTheme = 'dark-mode';
+                    updateThemeButton(true);
+                }
+                saveData();
+            }
+
+            // تحديث زر الوضع الليلي/النهاري
+            function updateThemeButton(isDarkMode) {
+                const themeText = appState.uiTexts[appState.currentLanguage].themeToggle;
+                DOM.themeToggle.innerHTML = isDarkMode 
+                    ? `<i class="fas fa-sun"></i><span class="btn-text">${themeText}</span>`
+                    : `<i class="fas fa-moon"></i><span class="btn-text">${themeText}</span>`;
+            }
+
+            // تبديل اللغة
+            function toggleLanguage() {
+                appState.currentLanguage = appState.currentLanguage === 'ar' ? 'en' : 'ar';
+                
+                // تغيير اتجاه النص
+                document.documentElement.dir = appState.currentLanguage === 'ar' ? 'rtl' : 'ltr';
+                document.documentElement.lang = appState.currentLanguage;
+                
+                // تحديث واجهة المستخدم
+                updateUILanguage();
+                
+                // تحديث زر اللغة
+                updateLanguageButton();
+                
+                saveData();
+            }
+
+            // تحديث زر اللغة
+            function updateLanguageButton() {
+                const langText = appState.uiTexts[appState.currentLanguage].languageToggle;
+                DOM.languageToggle.innerHTML = `<i class="fas fa-language"></i><span class="btn-text">${langText}</span>`;
+            }
+
+            // تحديث واجهة المستخدم حسب اللغة
+            function updateUILanguage() {
+                const texts = appState.uiTexts[appState.currentLanguage];
+                
+                // تحديث النصوص
+                document.getElementById('tool-title').textContent = texts.toolTitle;
+                DOM.teacherNameInput.placeholder = texts.teacherNamePlaceholder;
+                
+                // تحديث تسمية عرض الاسم
+                document.querySelector('.display-label').textContent = texts.nameDisplayLabel;
+                
+                // تحديث أزرار التحكم
+                updateThemeButton(DOM.body.classList.contains('dark-mode'));
+                updateLanguageButton();
+                
+                // تحديث أزرار التنقل
+                document.querySelectorAll('.nav-text').forEach((span, index) => {
+                    const sectionId = Object.keys(appState.sectionNames[appState.currentLanguage])[index];
+                    span.textContent = appState.sectionNames[appState.currentLanguage][sectionId];
+                });
+                
+                // تحديث عناوين الأقسام
+                document.querySelectorAll('.section-title').forEach((title, index) => {
+                    const sectionId = Object.keys(appState.sectionNames[appState.currentLanguage])[index];
+                    const icon = title.querySelector('i').outerHTML;
+                    title.innerHTML = icon + appState.sectionNames[appState.currentLanguage][sectionId];
+                });
+                
+                // تحديث أزرار إنشاء النص التلقائي
+                document.querySelectorAll('.generate-btn .btn-text').forEach(span => {
+                    span.textContent = texts.generateText;
+                });
+                
+                // تحديث أزرار الإجراءات
+                const actionBtns = document.querySelectorAll('.action-btn .btn-text');
+                if (actionBtns.length >= 3) {
+                    actionBtns[0].textContent = texts.preview;
+                    actionBtns[1].textContent = texts.exportHTML;
+                    actionBtns[2].textContent = texts.exportExcel;
+                }
+                
+                // تحديث نافذة المعاينة
+                document.querySelector('.modal-title').innerHTML = 
+                    `<i class="fas fa-file-alt"></i>${texts.previewTitle}`;
+                
+                const closeBtn = document.querySelector('#close-preview-btn span');
+                const downloadBtn = document.querySelector('#download-preview-btn span');
+                
+                if (closeBtn) closeBtn.textContent = texts.close;
+                if (downloadBtn) downloadBtn.textContent = texts.downloadHTML;
+            }
+
+            // معالجة النقر على رابط التنقل
+            function handleNavClick(e) {
+                e.preventDefault();
+                const sectionId = this.getAttribute('data-section');
+                switchToSection(sectionId);
+            }
+
+            // التبديل إلى قسم معين
+            function switchToSection(sectionId) {
+                // إخفاء جميع الأقسام
+                DOM.contentSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // إزالة النشاط من جميع روابط التنقل
+                DOM.navLinks.forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                // إظهار القسم المحدد
+                const targetSection = document.getElementById(sectionId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+                
+                // تفعيل رابط التنقل المحدد
+                const targetLink = document.querySelector(`.nav-link[data-section="${sectionId}"]`);
+                if (targetLink) {
+                    targetLink.classList.add('active');
+                }
+            }
+
+            // معالجة إنشاء النص التلقائي
+            function handleAutoGenerate() {
+                const sectionId = this.getAttribute('data-section');
+                generateAutoText(sectionId);
+            }
+
+            // إنشاء نص تلقائي
+            function generateAutoText(sectionId) {
+                const teacherName = appState.teacherName;
+                const sectionName = appState.sectionNames[appState.currentLanguage][sectionId];
+                let generatedText = '';
+                
+                // نصوص عربية
+                const arabicTexts = {
+                    'about-me': `أنا ${teacherName}، معلم متخصص في مجال التعليم مع خبرة تزيد عن 8 سنوات في التدريس. حاصل على درجة الماجستير في التربية وأعمل حاليًا كمشرف تربوي. أؤمن بأهمية تطوير أساليب التعليم لتنمية مهارات الطلاب الإبداعية والنقدية.`,
+                    'vision': `رؤيتي التعليمية تتمثل في تقديم تعليم متميز يواكب متطلبات العصر، ويساهم في بناء جيل قادر على التفكير النقدي والإبداعي. أسعى إلى تطوير بيئة تعليمية محفزة تشجع الطلاب على الاستكشاف والتعلّم الذاتي.`,
+                    'experiences': `- معلم مادة اللغة العربية للمرحلة المتوسطة (2017-2022)
+- مشرف تربوي (2022-2024)
+- منسق برامج الموهوبين في المدرسة (2020-2023)
+- عضو في لجنة تطوير المناهج (2021-2023)`,
+                    'achievements': `- الحصول على جائزة المعلم المتميز على مستوى المنطقة (2023)
+- رفع نسبة نجاح الطلاب في المادة بنسبة 25%
+- تنظيم معرض للإبداعات الطلابية حصل على تغطية إعلامية
+- تصميم برنامج تقييم مبتكر تم تطبيقه على مستوى المنطقة`,
+                    'courses': `- دورة "التدريس التفاعلي" - مركز التدريب التربوي (2022)
+- دورة "استراتيجيات التعلم النشط" - جامعة الملك سعود (2021)
+- دورة "التقويم البديل" - وزارة التعليم (2023)
+- دورة "تقنيات التعليم عن بعد" - أكاديمية التدريب الإلكتروني (2023)`,
+                    'skills': `- إتقان استخدام تقنيات التعليم الحديثة
+- مهارات التواصل الفعال مع الطلاب وأولياء الأمور
+- القدرة على تصميم الأنشطة التعليمية التفاعلية
+- مهارة تحليل النتائج والتقويم المستمر
+- إتقان استخدام برامج Microsoft Office والتعليم الإلكتروني`,
+                    'performance': `- تقييم "متميز" في الأداء الوظيفي لثلاث سنوات متتالية
+- شهادات شكر من إدارة التعليم للمبادرات الناجحة
+- تقارير تقييم إيجابية من المشرفين التربويين
+- نتائج رضا أولياء الأمور بنسبة 94% حسب استبيان المدرسة`,
+                    'portfolio': `- تصميم وحدة تعليمية تفاعلية في النحو العربي
+- إنتاج سلسلة فيديوهات تعليمية للطلاب ضعاف التحصيل
+- تأليف كتيب "نشاطات لغوية" للمرحلة المتوسطة
+- تصميم بوابة إلكترونية للأنشطة الصفية`,
+                    'contact': `البريد الإلكتروني: teacher@example.com
+الهاتف: 0550123456
+العنوان: الرياض، المملكة العربية السعودية
+LinkedIn: linkedin.com/in/teacher-name
+Twitter: @teacher_name`
                 };
                 
-                // مسح جميع حقول النصوص
-                document.querySelectorAll('.custom-text-box').forEach(textarea => {
-                    textarea.value = '';
-                });
+                // نصوص إنجليزية
+                const englishTexts = {
+                    'about-me': `I am ${teacherName}, a teacher specialized in education with over 8 years of teaching experience. I hold a Master's degree in Education and currently work as an educational supervisor. I believe in the importance of developing teaching methods to cultivate students' creative and critical skills.`,
+                    'vision': `My educational vision is to provide distinguished education that meets the requirements of the era and contributes to building a generation capable of critical and creative thinking. I seek to develop a stimulating educational environment that encourages students to explore and self-learn.`,
+                    'experiences': `- Arabic language teacher for middle school (2017-2022)
+- Educational supervisor (2022-2024)
+- Coordinator of gifted student programs at school (2020-2023)
+- Member of the curriculum development committee (2021-2023)`,
+                    'achievements': `- Receiving the Distinguished Teacher Award at the regional level (2023)
+- Increasing student success rates in the subject by 25%
+- Organizing a student creativity exhibition that received media coverage
+- Designing an innovative assessment program implemented at the regional level`,
+                    'courses': `- "Interactive Teaching" course - Educational Training Center (2022)
+- "Active Learning Strategies" course - King Saud University (2021)
+- "Alternative Assessment" course - Ministry of Education (2023)
+- "Distance Education Technologies" course - E-Learning Training Academy (2023)`,
+                    'skills': `- Proficiency in using modern teaching technologies
+- Effective communication skills with students and parents
+- Ability to design interactive educational activities
+- Skill in analyzing results and continuous assessment
+- Proficiency in using Microsoft Office programs and e-learning`,
+                    'performance': `- "Distinguished" evaluation in job performance for three consecutive years
+- Certificates of thanks from the education administration for successful initiatives
+- Positive evaluation reports from educational supervisors
+- Parent satisfaction results of 94% according to the school survey`,
+                    'portfolio': `- Designing an interactive educational unit in Arabic Grammar
+- Producing a series of educational videos for low-achieving students
+- Authoring a booklet "Language Activities" for middle school
+- Designing an electronic portal for classroom activities`,
+                    'contact': `Email: teacher@example.com
+Phone: 0550123456
+Address: Riyadh, Saudi Arabia
+LinkedIn: linkedin.com/in/teacher-name
+Twitter: @teacher_name`
+                };
                 
-                // مسح حقول التواصل
-                document.querySelectorAll('.contact-form input').forEach(input => {
-                    input.value = '';
-                });
+                generatedText = appState.currentLanguage === 'ar' ? arabicTexts[sectionId] : englishTexts[sectionId];
                 
-                // مسح النصوص المولدة
-                document.querySelectorAll('.ai-text-box').forEach(div => {
-                    div.textContent = 'انقر على زر "توليد نص ذكي" لإنشاء نص احترافي تلقائياً.';
-                });
-                
-                // مسح قوائم الملفات
-                document.getElementById('certificatesList').innerHTML = '';
-                document.getElementById('portfolioList').innerHTML = '';
-                
-                // مسح التخزين المحلي
-                localStorage.removeItem('teacherPortfolioData');
-                
-                showNotification('تم مسح جميع البيانات بنجاح', 'success');
-                updateProgress();
-                updatePreview();
-            }
-        }
-        
-        // ============== تصدير البيانات ==============
-        function exportData() {
-            const dataStr = JSON.stringify(teacherData, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            const exportFileDefaultName = `بيانات_الملف_المهني_${new Date().toISOString().slice(0,10)}.json`;
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-            
-            showNotification('تم تصدير البيانات بنجاح', 'success');
-        }
-        
-        // ============== إنشاء الملف المهني النهائي ==============
-        function generateFinalPortfolio() {
-            // التحقق من إدخال الاسم
-            if (!teacherData.name.trim()) {
-                showNotification('يرجى إدخال اسم المعلم أولاً', 'error');
-                teacherNameInput.focus();
-                return;
-            }
-            
-            // حفظ جميع البيانات أولاً
-            saveAllData();
-            
-            // إنشاء محتوى HTML للصفحة النهائية
-            const htmlContent = createPortfolioHTML();
-            
-            // فتح النافذة لمعاينة الملف
-            const newWindow = window.open();
-            newWindow.document.write(htmlContent);
-            newWindow.document.close();
-            
-            // توفير رابط للتنزيل
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `الملف_المهني_${teacherData.name.replace(/\s+/g, '_')}.html`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showNotification('تم إنشاء الملف المهني وتنزيله بنجاح', 'success');
-        }
-        
-        // ============== إنشاء HTML للصفحة النهائية ==============
-        function createPortfolioHTML() {
-            const getContent = (section) => {
-                return teacherData[section].custom || teacherData[section].ai || 'لم يتم إضافة محتوى';
-            };
-            
-            return `<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الملف المهني - ${teacherData.name}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #2c5aa0;
-            --secondary-color: #4a90e2;
-            --accent-color: #f8b739;
-            --light-color: #f5f9ff;
-            --dark-color: #2c3e50;
-            --border-radius: 12px;
-            --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Tajawal', sans-serif;
-        }
-        
-        body {
-            background-color: #f0f5ff;
-            color: #333;
-            line-height: 1.7;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .portfolio-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 50px 40px;
-            border-radius: var(--border-radius);
-            text-align: center;
-            margin-bottom: 40px;
-            box-shadow: var(--box-shadow);
-        }
-        
-        .teacher-name {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 15px;
-        }
-        
-        .teacher-title {
-            font-size: 1.5rem;
-            opacity: 0.9;
-            margin-bottom: 25px;
-        }
-        
-        .contact-info {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 25px;
-            margin-top: 20px;
-        }
-        
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-            font-size: 1.05rem;
-        }
-        
-        .contact-item i {
-            color: var(--accent-color);
-        }
-        
-        .portfolio-section {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 35px;
-            margin-bottom: 30px;
-            box-shadow: var(--box-shadow);
-        }
-        
-        .section-title {
-            color: var(--primary-color);
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f5ff;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .section-title i {
-            color: var(--accent-color);
-        }
-        
-        .section-content {
-            color: #555;
-            line-height: 1.9;
-            font-size: 1.1rem;
-        }
-        
-        .files-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .file-card {
-            background-color: #f9fbff;
-            border-radius: var(--border-radius);
-            padding: 20px;
-            border: 1px solid #e1e8f0;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: transform 0.3s ease;
-        }
-        
-        .file-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .file-icon {
-            width: 60px;
-            height: 60px;
-            background-color: var(--primary-color);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.8rem;
-        }
-        
-        .file-info h4 {
-            color: var(--dark-color);
-            margin-bottom: 5px;
-            font-size: 1.1rem;
-        }
-        
-        .file-info span {
-            color: #6c757d;
-            font-size: 0.9rem;
-        }
-        
-        .footer-note {
-            text-align: center;
-            padding: 25px;
-            background-color: #f0f7ff;
-            border-radius: var(--border-radius);
-            color: var(--dark-color);
-            font-size: 0.95rem;
-            margin-top: 50px;
-        }
-        
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            
-            .portfolio-header {
-                padding: 30px 20px;
-            }
-            
-            .teacher-name {
-                font-size: 2.2rem;
-            }
-            
-            .portfolio-section {
-                padding: 25px 20px;
-            }
-            
-            .contact-info {
-                flex-direction: column;
-                gap: 15px;
-            }
-        }
-        
-        @media print {
-            body {
-                background-color: white;
-                padding: 0;
-            }
-            
-            .portfolio-header {
-                box-shadow: none;
-            }
-            
-            .portfolio-section {
-                box-shadow: none;
-                page-break-inside: avoid;
-            }
-            
-            .footer-note {
-                display: none;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="portfolio-header">
-            <h1 class="teacher-name">${teacherData.name}</h1>
-            <p class="teacher-title">ملف مهني احترافي للمعلم</p>
-            <div class="contact-info">
-                ${teacherData.contact.phone ? `<div class="contact-item">
-                    <i class="fas fa-phone"></i>
-                    <span>${teacherData.contact.phone}</span>
-                </div>` : ''}
-                ${teacherData.contact.email ? `<div class="contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <span>${teacherData.contact.email}</span>
-                </div>` : ''}
-                ${teacherData.contact.whatsapp ? `<div class="contact-item">
-                    <i class="fab fa-whatsapp"></i>
-                    <span>واتساب</span>
-                </div>` : ''}
-            </div>
-        </div>
-        
-        ${getContent('about') ? `<div class="portfolio-section">
-            <h2 class="section-title"><i class="fas fa-user"></i> نبذة عني</h2>
-            <div class="section-content">${getContent('about').replace(/\n/g, '<br>')}</div>
-        </div>` : ''}
-        
-        ${getContent('vision') ? `<div class="portfolio-section">
-            <h2 class="section-title"><i class="fas fa-eye"></i> الرؤية التعليمية</h2>
-            <div class="section-content">${getContent('vision').replace(/\n/g, '<br>')}</div>
-        </div>` : ''}
-        
-        ${getContent('experience') ? `<div class="portfolio-section">
-            <h2 class="section-title"><i class="fas fa-briefcase"></i> الخبرات التعليمية</h2>
-            <div class="section-content">${getContent('experience').replace(/\n/g, '<br>')}</div>
-        </div>` : ''}
-        
-        ${getContent('achievements') ? `<div class="portfolio-section">
-            <h2 class="section-title"><i class="fas fa-trophy"></i> الإنجازات</h2>
-            <div class="section-content">${getContent('achievements').replace(/\n/g, '<br>')}</div>
-        </div>` : ''}
-        
-        ${getContent('courses') ? `<div class="portfolio-section">
-            <h2 class="section-title"><i class="fas fa-certificate"></i> الدورات التدريبية</h2>
-            <div class="section-content">${getContent('courses').replace(/\n/g, '<br>')}</div>
-        </div>` : ''}
-        
-        ${getContent('skills') ? `<div class="portfolio-section">
-            <h2 class="section-title"><i class="fas fa-star"></i> المهارات</h2>
-            <div class="section-content">${getContent('skills').replace(/\n/g, '<br>')}</div>
-        </div>` : ''}
-        
-        ${teacherData.certificates.files.length > 0 ? `<div class="portfolio-section">
-            <h2 class="section-title"><i class="fas fa-award"></i> شواهد الأداء</h2>
-            ${getContent('certificates') ? `<div class="section-content" style="margin-bottom: 25px;">${getContent('certificates').replace(/\n/g, '<br>')}</div>` : ''}
-            <div class="files-grid">
-                ${teacherData.certificates.files.map(file => `
-                    <div class="file-card">
-                        <div class="file-icon">
-                            <i class="${getFileIcon(file.type)}"></i>
-                        </div>
-                        <div class="file-info">
-                            <h4>${file.name}</h4>
-                            <span>${file.size} • ${file.date}</span>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        </div>` : ''}
-        
-        ${teacherData.portfolio.files.length > 0 ? `<div class="portfolio-section">
-            <h2 class="section-title"><i class="fas fa-images"></i> معرض الأعمال</h2>
-            ${getContent('portfolio') ? `<div class="section-content" style="margin-bottom: 25px;">${getContent('portfolio').replace(/\n/g, '<br>')}</div>` : ''}
-            <div class="files-grid">
-                ${teacherData.portfolio.files.map(file => `
-                    <div class="file-card">
-                        <div class="file-icon">
-                            <i class="${getFileIcon(file.type)}"></i>
-                        </div>
-                        <div class="file-info">
-                            <h4>${file.name}</h4>
-                            <span>${file.size} • ${file.date}</span>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        </div>` : ''}
-        
-        <div class="footer-note">
-            <p>تم إنشاء هذا الملف المهني باستخدام أداة إنشاء الملف المهني للمعلمين - ${new Date().toLocaleDateString('ar-SA')}</p>
-        </div>
-    </div>
-    
-    <script>
-        // إضافة زر الطباعة
-        const printButton = document.createElement('button');
-        printButton.innerHTML = '<i class="fas fa-print"></i> طباعة الملف';
-        printButton.style.cssText = 'position: fixed; bottom: 20px; left: 20px; background: var(--primary-color); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-family: inherit; font-size: 1rem; cursor: pointer; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);';
-        printButton.addEventListener('click', function() {
-            window.print();
-        });
-        document.body.appendChild(printButton);
-    </script>
-</body>
-</html>`;
-        }
-        
-        // ============== وظائف مساعدة ==============
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        }
-        
-        function getFileIcon(fileType) {
-            if (fileType.includes('pdf')) return 'fas fa-file-pdf';
-            if (fileType.includes('image')) return 'fas fa-file-image';
-            if (fileType.includes('word') || fileType.includes('document')) return 'fas fa-file-word';
-            if (fileType.includes('presentation') || fileType.includes('powerpoint')) return 'fas fa-file-powerpoint';
-            if (fileType.includes('spreadsheet') || fileType.includes('excel')) return 'fas fa-file-excel';
-            return 'fas fa-file';
-        }
-        
-        function showNotification(message, type) {
-            notification.textContent = message;
-            notification.className = `notification ${type} show`;
-            
-            if (type === 'success') {
-                notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
-            } else if (type === 'error') {
-                notification.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
-            }
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-        
-        function toggleLanguage() {
-            currentLanguage = currentLanguage === 'ar' ? 'en' : 'ar';
-            
-            // في التطبيق الحقيقي، هنا سيتم تحويل جميع النصوص للغة الأخرى
-            // لكن للعرض التوضيحي سنكتفي بتغيير النص على الزر
-            const languageIcon = languageToggle.querySelector('i');
-            if (currentLanguage === 'en') {
-                languageIcon.className = 'fas fa-language';
-                languageToggle.title = 'Switch to Arabic';
-                showNotification('تم التبديل إلى اللغة الإنجليزية', 'success');
-            } else {
-                languageIcon.className = 'fas fa-language';
-                languageToggle.title = 'التبديل إلى الإنجليزية';
-                showNotification('تم التبديل إلى اللغة العربية', 'success');
-            }
-        }
-        
-        function toggleDarkMode() {
-            isDarkMode = !isDarkMode;
-            
-            if (isDarkMode) {
-                document.body.classList.add('dark-mode');
-                themeToggle.querySelector('i').className = 'fas fa-sun';
-                themeToggle.title = 'الوضع النهاري';
-            } else {
-                document.body.classList.remove('dark-mode');
-                themeToggle.querySelector('i').className = 'fas fa-moon';
-                themeToggle.title = 'الوضع الليلي';
-            }
-            
-            localStorage.setItem('darkMode', isDarkMode);
-        }
-        
-        function saveToLocalStorage() {
-            localStorage.setItem('teacherPortfolioData', JSON.stringify(teacherData));
-        }
-        
-        function loadSavedData() {
-            const savedData = localStorage.getItem('teacherPortfolioData');
-            if (savedData) {
-                teacherData = JSON.parse(savedData);
-                
-                // تحميل اسم المعلم
-                if (teacherData.name) {
-                    teacherNameInput.value = teacherData.name;
+                // تحديث النص في الحقل
+                const textarea = document.querySelector(`textarea[data-section="${sectionId}"]`);
+                if (textarea) {
+                    textarea.value = generatedText;
                 }
                 
-                // تحميل النصوص المخصصة
-                const sections = ['about', 'vision', 'experience', 'achievements', 'courses', 'skills', 'certificates', 'portfolio'];
-                sections.forEach(section => {
-                    const textarea = document.getElementById(`custom${capitalizeFirstLetter(section)}Text`);
-                    if (textarea && teacherData[section].custom) {
-                        textarea.value = teacherData[section].custom;
-                    }
-                    
-                    const aiBox = document.getElementById(`ai${capitalizeFirstLetter(section)}Text`);
-                    if (aiBox && teacherData[section].ai) {
-                        aiBox.textContent = teacherData[section].ai;
+                // تحديث الحالة
+                appState.sections[sectionId] = generatedText;
+                
+                // حفظ البيانات
+                saveData();
+                
+                // إظهار إشعار النجاح
+                showNotification(appState.uiTexts[appState.currentLanguage].notificationMessages.autoGenerated);
+            }
+
+            // معالجة تغيير النص في الحقول
+            function handleTextareaChange() {
+                const sectionId = this.getAttribute('data-section');
+                appState.sections[sectionId] = this.value;
+                saveData();
+            }
+
+            // تهيئة النصوص في الحقول
+            function initializeTextareas() {
+                DOM.textareas.forEach(textarea => {
+                    const sectionId = textarea.getAttribute('data-section');
+                    if (textarea.value && !appState.sections[sectionId]) {
+                        appState.sections[sectionId] = textarea.value;
                     }
                 });
-                
-                // تحميل بيانات التواصل
-                if (teacherData.contact.phone) document.getElementById('phone').value = teacherData.contact.phone;
-                if (teacherData.contact.email) document.getElementById('email').value = teacherData.contact.email;
-                if (teacherData.contact.whatsapp) document.getElementById('whatsapp').value = teacherData.contact.whatsapp;
-                if (teacherData.contact.twitter) document.getElementById('twitter').value = teacherData.contact.twitter;
-                if (teacherData.contact.linkedin) document.getElementById('linkedin').value = teacherData.contact.linkedin;
-                
-                // تحميل قوائم الملفات
-                updateFileList('certificates');
-                updateFileList('portfolio');
-                
-                showNotification('تم تحميل البيانات المحفوظة بنجاح', 'success');
+                saveData();
             }
-        }
+
+            // عرض معاينة الملف
+            function showPreview() {
+                const previewHTML = createProfessionalPreview();
+                DOM.previewContent.innerHTML = previewHTML;
+                DOM.previewModal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+
+            // إنشاء معاينة احترافية
+            function createProfessionalPreview() {
+                const isDarkMode = DOM.body.classList.contains('dark-mode');
+                const direction = appState.currentLanguage === 'ar' ? 'rtl' : 'ltr';
+                
+                return `
+                    <div class="preview-document" dir="${direction}">
+                        <div class="preview-header">
+                            <h1>${appState.teacherName}</h1>
+                            <p>${appState.currentLanguage === 'ar' ? 'الملف المهني للمعلم' : 'Teacher Professional Portfolio'}</p>
+                            <p>${new Date().toLocaleDateString(appState.currentLanguage === 'ar' ? 'ar-SA' : 'en-US', { 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                            })}</p>
+                        </div>
+                        
+                        ${Object.keys(appState.sections).map(sectionId => `
+                            <div class="preview-section">
+                                <h2>${appState.sectionNames[appState.currentLanguage][sectionId]}</h2>
+                                <div class="preview-text">${appState.sections[sectionId] || (appState.currentLanguage === 'ar' ? 'لا توجد بيانات' : 'No data available')}</div>
+                            </div>
+                        `).join('')}
+                        
+                        <div class="preview-section">
+                            <h2>${appState.currentLanguage === 'ar' ? 'تم الإنشاء بواسطة' : 'Generated by'}</h2>
+                            <div class="preview-text">
+                                ${appState.currentLanguage === 'ar' 
+                                    ? 'أداة الملف المهني للمعلم - جميع الحقوق محفوظة' 
+                                    : 'Teacher Professional Portfolio Tool - All rights reserved'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // إغلاق نافذة المعاينة
+            function closePreviewModal() {
+                DOM.previewModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+
+            // تصدير إلى HTML
+            function exportToHTML() {
+                const teacherName = appState.teacherName.replace(/\s+/g, '_');
+                const timestamp = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+                const filename = `Teacher_Portfolio_${teacherName}_${timestamp}.html`;
+                
+                const fullHTML = generateProfessionalHTML();
+                
+                // إنشاء ملف وتنزيله
+                const blob = new Blob([fullHTML], { type: 'text/html;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                // إظهار إشعار النجاح
+                showNotification(appState.uiTexts[appState.currentLanguage].notificationMessages.htmlExported);
+            }
+
+            // إنشاء ملف HTML احترافي
+            function generateProfessionalHTML() {
+                const direction = appState.currentLanguage === 'ar' ? 'rtl' : 'ltr';
+                const lang = appState.currentLanguage === 'ar' ? 'ar' : 'en';
+                
+                return `<!DOCTYPE html>
+        <html lang="${lang}" dir="${direction}">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>${appState.teacherName} - ${appState.currentLanguage === 'ar' ? 'الملف المهني' : 'Professional Portfolio'}</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+            <style>
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                    font-family: 'Tajawal', sans-serif;
+                }
+                
+                body {
+                    background-color: #fff;
+                    color: #333;
+                    line-height: 1.6;
+                    padding: 30px;
+                    max-width: 1000px;
+                    margin: 0 auto;
+                }
+                
+                .document {
+                    background: white;
+                    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+                    padding: 40px;
+                    border-radius: 8px;
+                }
+                
+                .header {
+                    text-align: center;
+                    margin-bottom: 40px;
+                    padding-bottom: 30px;
+                    border-bottom: 3px solid #4a6fa5;
+                }
+                
+                .header h1 {
+                    color: #166088;
+                    font-size: 2.5rem;
+                    margin-bottom: 10px;
+                }
+                
+                .header p {
+                    color: #666;
+                    font-size: 1.2rem;
+                    margin-bottom: 5px;
+                }
+                
+                .section {
+                    margin-bottom: 30px;
+                    page-break-inside: avoid;
+                }
+                
+                .section h2 {
+                    color: #166088;
+                    font-size: 1.8rem;
+                    margin-bottom: 15px;
+                    padding-bottom: 10px;
+                    border-bottom: 1px solid #eee;
+                }
+                
+                .content {
+                    font-size: 1.1rem;
+                    white-space: pre-line;
+                    margin-bottom: 10px;
+                    line-height: 1.8;
+                }
+                
+                .footer {
+                    text-align: center;
+                    margin-top: 50px;
+                    padding-top: 20px;
+                    border-top: 1px solid #eee;
+                    color: #777;
+                    font-size: 0.9rem;
+                }
+                
+                @media print {
+                    body {
+                        padding: 0;
+                    }
+                    
+                    .document {
+                        box-shadow: none;
+                        padding: 20px;
+                    }
+                    
+                    .section {
+                        page-break-inside: avoid;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="document">
+                <div class="header">
+                    <h1>${appState.teacherName}</h1>
+                    <p>${appState.currentLanguage === 'ar' ? 'الملف المهني للمعلم' : 'Teacher Professional Portfolio'}</p>
+                    <p>${new Date().toLocaleDateString(appState.currentLanguage === 'ar' ? 'ar-SA' : 'en-US', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    })}</p>
+                </div>
+                
+                ${Object.keys(appState.sections).map(sectionId => `
+                    <div class="section">
+                        <h2>${appState.sectionNames[appState.currentLanguage][sectionId]}</h2>
+                        <div class="content">${appState.sections[sectionId] || (appState.currentLanguage === 'ar' ? 'لا توجد بيانات' : 'No data available')}</div>
+                    </div>
+                `).join('')}
+                
+                <div class="footer">
+                    <p>${appState.currentLanguage === 'ar' 
+                        ? 'تم الإنشاء بواسطة أداة الملف المهني للمعلم - جميع الحقوق محفوظة' 
+                        : 'Generated by Teacher Professional Portfolio Tool - All rights reserved'}</p>
+                </div>
+            </div>
+        </body>
+        </html>`;
+            }
+
+            // تصدير إلى Excel
+            function exportToExcel() {
+                const teacherName = appState.teacherName.replace(/\s+/g, '_');
+                const timestamp = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+                const filename = `Teacher_Portfolio_${teacherName}_${timestamp}.xlsx`;
+                
+                // إنشاء البيانات
+                const data = [];
+                
+                // إضافة العناوين
+                data.push([
+                    appState.currentLanguage === 'ar' ? 'اسم القسم' : 'Section Name',
+                    appState.currentLanguage === 'ar' ? 'المحتوى' : 'Content'
+                ]);
+                
+                // إضافة بيانات كل قسم
+                Object.keys(appState.sections).forEach(sectionId => {
+                    const sectionTitle = appState.sectionNames[appState.currentLanguage][sectionId];
+                    const content = appState.sections[sectionId] || (appState.currentLanguage === 'ar' ? 'لا توجد بيانات' : 'No data available');
+                    data.push([sectionTitle, content]);
+                });
+                
+                // إنشاء ورقة العمل
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                
+                // ضبط عرض الأعمدة
+                const wscols = [
+                    {wch: 25}, // عرض العمود الأول
+                    {wch: 80}  // عرض العمود الثاني
+                ];
+                ws['!cols'] = wscols;
+                
+                // إنشاء المصنف وإضافة الورقة
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, appState.currentLanguage === 'ar' ? 'الملف المهني' : 'Portfolio');
+                
+                // حفظ الملف
+                XLSX.writeFile(wb, filename);
+                
+                // إظهار إشعار النجاح
+                showNotification(appState.uiTexts[appState.currentLanguage].notificationMessages.excelExported);
+            }
+
+            // إظهار إشعار
+            function showNotification(message) {
+                DOM.notificationMessage.textContent = message;
+                DOM.successNotification.style.display = 'flex';
+                
+                // إخفاء الإشعار تلقائيًا بعد 3 ثوانٍ
+                setTimeout(() => {
+                    DOM.successNotification.style.display = 'none';
+                }, 3000);
+            }
+
+            // حفظ البيانات
+            function saveData() {
+                const dataToSave = {
+                    teacherName: appState.teacherName,
+                    currentLanguage: appState.currentLanguage,
+                    currentTheme: appState.currentTheme,
+                    sections: appState.sections
+                };
+                
+                try {
+                    localStorage.setItem('teacherPortfolioData', JSON.stringify(dataToSave));
+                } catch (e) {
+                    console.error('Error saving data:', e);
+                }
+            }
+
+            // تحميل البيانات المحفوظة
+            function loadSavedData() {
+                try {
+                    const savedData = localStorage.getItem('teacherPortfolioData');
+                    
+                    if (savedData) {
+                        const data = JSON.parse(savedData);
+                        
+                        // تحميل اسم المعلم
+                        if (data.teacherName) {
+                            appState.teacherName = data.teacherName;
+                            DOM.teacherNameInput.value = data.teacherName;
+                            DOM.nameDisplay.textContent = data.teacherName;
+                        }
+                        
+                        // تحميل اللغة
+                        if (data.currentLanguage) {
+                            appState.currentLanguage = data.currentLanguage;
+                            document.documentElement.dir = appState.currentLanguage === 'ar' ? 'rtl' : 'ltr';
+                            document.documentElement.lang = appState.currentLanguage;
+                        }
+                        
+                        // تحميل الوضع
+                        if (data.currentTheme) {
+                            appState.currentTheme = data.currentTheme;
+                            DOM.body.classList.remove('light-mode', 'dark-mode');
+                            DOM.body.classList.add(data.currentTheme);
+                        }
+                        
+                        // تحميل بيانات الأقسام
+                        if (data.sections) {
+                            appState.sections = data.sections;
+                            
+                            // تحديث الحقول
+                            Object.keys(data.sections).forEach(sectionId => {
+                                const textarea = document.querySelector(`textarea[data-section="${sectionId}"]`);
+                                if (textarea && data.sections[sectionId]) {
+                                    textarea.value = data.sections[sectionId];
+                                }
+                            });
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error loading saved data:', e);
+                }
+            }
+
+            // بدء تشغيل التطبيق
+            initApp();
+        });
     </script>
 </body>
 </html>
